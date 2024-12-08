@@ -1,0 +1,6 @@
+@Deco_Sara_HostAddress = http://localhost:5160
+
+GET {{Deco_Sara_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

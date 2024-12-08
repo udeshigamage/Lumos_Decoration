@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deco_Sara", "Deco_Sara\Deco_Sara.csproj", "{0D1755FD-01A3-4505-A94F-C77ABB30EEBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D1755FD-01A3-4505-A94F-C77ABB30EEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D1755FD-01A3-4505-A94F-C77ABB30EEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D1755FD-01A3-4505-A94F-C77ABB30EEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D1755FD-01A3-4505-A94F-C77ABB30EEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {39299583-D447-45DF-B313-DC286E7D3C10}
+	EndGlobalSection
+EndGlobal
