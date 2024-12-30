@@ -1,11 +1,14 @@
-﻿namespace Deco_Sara.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Deco_Sara.Models
 {
     public class User
     {
-        public int UserID { get; set; }
+        [Key]
+        public int User_ID { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; } 
+       
+        public string PasswordHash { get; set; }
+        public int Role_ID { get; set; } 
     }
 }

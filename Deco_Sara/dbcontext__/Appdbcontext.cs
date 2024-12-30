@@ -10,10 +10,20 @@ namespace Deco_Sara.dbcontext__
         {
         }
 
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Customer> Customer { get; set; }
         public DbSet<User> Users { get; set; }
-       
+
+        public DbSet<Allowance> Allowances { get; set; }
+        public DbSet<Decorationstatus>Decorationstatuses { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Notification> notifications { get; set; }
+
     }
+
 
     
    
