@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Deco_Sara.dbcontext__;
 using System;
+using Deco_Sara.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<Appdbcontext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 31)) // Replace with your MySQL version
     ));
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
