@@ -16,26 +16,26 @@ namespace Deco_Sara.Services
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
-            return await _context.Employees.ToListAsync();
+            return await _context.Employee.ToListAsync();
         }
 
         public async Task<Employee> GetByIdAsync(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            return await _context.Employee.FindAsync(id);
         }
 
-        public async Task<Employee> AddAsync(Employee employee)
+        public async Task<Employee> AddAsync(Employee employees)
         {
-            _context.Employees.Add(employee);
+            _context.Employee.Add(employees);
             await _context.SaveChangesAsync();
-            return employee;
+            return employees;
         }
         public async Task<bool> DeleteAsync(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null) return false;
+            var employees = await _context.Employee.FindAsync(id);
+            if (employees == null) return false;
 
-            _context.Employees.Remove(employee);
+            _context.Employee.Remove(employees);
             await _context.SaveChangesAsync();
             return true;
         }

@@ -3,6 +3,7 @@ using System;
 using Deco_Sara.dbcontext__;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    partial class AppdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250109145514_AddEmail_Address")]
+    partial class AddEmail_Address
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,9 +108,8 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<decimal>("Allowance")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("emp_Name")
                         .IsRequired()
@@ -117,20 +119,13 @@ namespace Deco_Sara.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("emp_address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<decimal>("emp_allowance")
-                        .HasColumnType("decimal(65,30)");
-
                     b.Property<string>("emp_contact_no")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Emp_ID");
 
-                    b.ToTable("Employee");
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Notification", b =>
