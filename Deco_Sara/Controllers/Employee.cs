@@ -37,7 +37,21 @@ namespace Deco_Sara.Controllers
             return CreatedAtAction(nameof(GetById), new { id = newEmployee.Emp_ID }, newEmployee);
         }
 
-       
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEmployee(int id, Employee employee)
+        {
+            var updatedEmployee = await _employeeService.UpdateAsync(id, employee);
+
+            if (updatedEmployee == null)
+            {
+                return NotFound(); 
+            }
+
+            return Ok(updatedEmployee); 
+        }
+
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

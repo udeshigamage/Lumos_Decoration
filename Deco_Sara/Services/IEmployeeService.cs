@@ -9,8 +9,11 @@ namespace Deco_Sara.Services
 
         Task<Employee> AddAsync(Employee employee);
 
-       // Task<Employee> UpdateAsync(Employee employee);
+        Task<Employee?> UpdateAsync(int id, Employee employee); 
 
         Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<Employee>> GetAllSearchAsync(string? search = null);
+
     }
 }

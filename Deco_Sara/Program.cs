@@ -19,6 +19,10 @@ builder.Services.AddDbContext<Appdbcontext>(options =>
 // Register custom services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {

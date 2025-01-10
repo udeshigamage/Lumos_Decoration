@@ -18,7 +18,7 @@ namespace Deco_Sara.dbcontext__
 
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Order> Order { get; set; }
         
 
         public DbSet<Employee>Employee {  get; set; }
