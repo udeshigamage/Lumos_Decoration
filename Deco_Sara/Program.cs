@@ -23,6 +23,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {
