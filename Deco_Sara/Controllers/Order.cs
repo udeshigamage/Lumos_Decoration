@@ -50,11 +50,33 @@ namespace Deco_Sara.Controllers
 
                 return Ok(updatedOrder);
             }
+        [HttpGet("orders/{customerId}")]
+        public async Task<IActionResult> GetAllOrdersForCustomer(int customerId)
+        {
+            var orders = await _orderService.GetAllOrdersForCustomerAsync(customerId);
+            return Ok(orders);
+        }
+
+        [HttpGet("orderscount/{customerId}")]
+        public async Task<IActionResult> GetOrdersCount(int customerId)
+        {
+            var pendingCount = await _orderService.GetPendingOrdersCountAsync(customerId);
+            var newCount = await _orderService.GetNewOrdersCountAsync(customerId);
+            var completedCount = await _orderService.GetCompletedOrdersCountAsync(customerId);
+
+            var result = new
+            {
+                Pending = pendingCount,
+                New = newCount,
+                Completed = completedCount
+            };
+
+            return Ok(result);
+        }
 
 
 
-
-            [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
             public async Task<IActionResult> Delete(int id)
             {
                 var result = await _orderService.DeleteAsync(id);

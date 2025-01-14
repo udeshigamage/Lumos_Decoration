@@ -26,6 +26,8 @@ namespace Deco_Sara.dbcontext__
         public DbSet<Employee>Employee {  get; set; }
         public DbSet<Notification> notifications { get; set; }
 
+
+
     }
 
 

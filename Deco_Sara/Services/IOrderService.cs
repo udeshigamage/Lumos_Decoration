@@ -3,7 +3,17 @@
 namespace Deco_Sara.Services
 {
     public interface IOrderService
+
     {
+
+        Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId);
+
+        Task<int> GetPendingOrdersCountAsync(int customerId);
+        Task<int> GetNewOrdersCountAsync(int customerId);
+
+        Task<int> GetCompletedOrdersCountAsync(int customerId);
+
+
         Task<IEnumerable<Order>> GetAllOrdersAsync();
 
         Task<Order> GetByIdAsync(int id);

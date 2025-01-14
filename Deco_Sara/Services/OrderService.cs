@@ -21,6 +21,38 @@ namespace Deco_Sara.Services
             return await _context.Order.ToListAsync();
         }
 
+        
+
+
+        // Query to get the count of pending orders for the specified customer
+
+
+        public async Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId)
+        {
+            return await _context.Order
+                .Where(order => order.Customer_ID == customerId)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetPendingOrdersCountAsync(int customerId)
+        {
+            return await _context.Order
+                .Where(order => order.Customer_ID == customerId && order.status == "pending")
+                .CountAsync();
+        }
+        public async Task<int> GetNewOrdersCountAsync(int customerId)
+        {
+            return await _context.Order
+                .Where(order => order.Customer_ID == customerId && order.status == "To Accept")
+                .CountAsync();
+        }
+        public async Task<int> GetCompletedOrdersCountAsync(int customerId)
+        {
+            return await _context.Order
+                .Where(order => order.Customer_ID == customerId && order.status == "Completed")
+                .CountAsync();
+        }
+
         public async Task<Order> GetByIdAsync(int id)
         {
             return await _context.Order.FindAsync(id);
