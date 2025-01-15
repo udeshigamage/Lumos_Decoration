@@ -1,6 +1,7 @@
 ﻿using Deco_Sara.Models;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Deco_Sara.Controllers
 {
@@ -17,10 +18,18 @@ namespace Deco_Sara.Controllers
             }
 
             [HttpGet]
-            public async Task<IActionResult> GetAll()
+            public async Task<IActionResult> GetAll(int page=1,int pagesize=10)
             {
-                var order = await _orderService.GetAllOrdersAsync();
-                return Ok(order);
+                var (Order,totalCount) = await _orderService.GetAllOrdersAsync(page,pagesize);
+
+            var response = new
+            {
+                data = Order,
+                totalItems = totalCount,
+                totalPages = (int)Math.Ceiling((double)totalCount / pagesize),
+                currentPage = page
+            };
+            return Ok(response);
             }
 
             [HttpGet("{id}")]
@@ -63,6 +72,23 @@ namespace Deco_Sara.Controllers
             var pendingCount = await _orderService.GetPendingOrdersCountAsync(customerId);
             var newCount = await _orderService.GetNewOrdersCountAsync(customerId);
             var completedCount = await _orderService.GetCompletedOrdersCountAsync(customerId);
+
+            var result = new
+            {
+                Pending = pendingCount,
+                New = newCount,
+                Completed = completedCount
+            };
+
+            return Ok(result);
+        }
+
+        [HttpGet("orderscount")]
+        public async Task<IActionResult> GetAllOrdersCount()
+        {
+            var pendingCount = await _orderService.GetPendingOrdersCountAsync();
+            var newCount = await _orderService.GetNewOrdersCountAsync();
+            var completedCount = await _orderService.GetCompletedOrdersCountAsync();
 
             var result = new
             {

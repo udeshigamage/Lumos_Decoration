@@ -1,6 +1,7 @@
 ﻿using Deco_Sara.Models;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Deco_Sara.Controllers
 {
@@ -17,10 +18,18 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page=1,int pagesize=10)
         {
-            var feedback = await _feedbackService.GetAllAsync();
-            return Ok(feedback);
+            var (feedbacks, totalcount) = await _feedbackService.GetAllAsync(page, pagesize);
+            var response = new
+            {
+                data = feedbacks,
+                totalItems = totalcount,
+                totalPages = (int)Math.Ceiling((double)totalcount / pagesize),
+                currentPage = page
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

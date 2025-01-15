@@ -16,10 +16,18 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page=1,int pagesize=10)
         {
-            var customers = await _customerService.GetAllAsync();
-            return Ok(customers);
+            var (customers,totalcount) = await _customerService.GetAllAsync(page,pagesize);
+            var response = new
+            {
+                data = customers,
+                totalItems = totalcount,
+                totalPages = (int)Math.Ceiling((double)totalcount / pagesize),
+                currentPage = page
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

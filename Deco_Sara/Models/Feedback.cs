@@ -14,7 +14,8 @@ namespace Deco_Sara.Models
             public DateTime FeedbackDate { get; set; } // Date the feedback was submitted
             public string FeedbackCategory { get; set; } // Optional: Category (e.g., service, product, delivery)
             public bool IsResolved { get; set; } // Flag to indicate if the feedback has been addressed
-       
+            
+
 
     }
 }

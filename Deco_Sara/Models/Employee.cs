@@ -19,5 +19,7 @@ namespace Deco_Sara.Models
         public string emp_contact_no { get; set; }
 
         public decimal emp_allowance { get; set; } = 0.00M;
+
+        public int Order_ID { get; set; }
     }
 }

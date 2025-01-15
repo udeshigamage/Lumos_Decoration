@@ -4,7 +4,7 @@ namespace Deco_Sara.Services
 {
     public interface ICustomerService
     {
-        Task<IEnumerable<Customer>> GetAllAsync();
+        Task<(IEnumerable<Customer> customers,int TotalCount)> GetAllAsync(int page=1,int pagesize=10);
         Task<Customer> GetByIdAsync(int id);
 
         Task<Customer> AddAsync(Customer customer);

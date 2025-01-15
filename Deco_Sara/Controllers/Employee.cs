@@ -16,11 +16,21 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10)
         {
-            var employees = await _employeeService.GetAllAsync();
-            return Ok(employees);
+            var (employees, totalCount) = await _employeeService.GetAllAsync(page, pageSize);
+
+            var response = new
+            {
+                data = employees,
+                totalItems = totalCount,
+                totalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                currentPage = page
+            };
+
+            return Ok(response);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

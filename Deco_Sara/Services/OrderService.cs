@@ -16,9 +16,16 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<(IEnumerable<Order> Order, int TotalCount)> GetAllOrdersAsync(int page = 1, int pageSize = 10)
         {
-            return await _context.Order.ToListAsync();
+            var totalCount = await _context.Order.CountAsync();
+
+            var Order = await _context.Order
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (Order, totalCount);
         }
 
         
@@ -44,6 +51,24 @@ namespace Deco_Sara.Services
         {
             return await _context.Order
                 .Where(order => order.Customer_ID == customerId && order.status == "To Accept")
+                .CountAsync();
+        }
+        public async Task<int> GetNewOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order =>  order.status == "To Accept")
+                .CountAsync();
+        }
+        public async Task<int> GetCompletedOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order => order.status == "Completed")
+                .CountAsync();
+        }
+        public async Task<int> GetPendingOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order => order.status == "pending")
                 .CountAsync();
         }
         public async Task<int> GetCompletedOrdersCountAsync(int customerId)

@@ -14,9 +14,11 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Feedback>> GetAllAsync()
+        public async Task<(IEnumerable<Feedback> feedbacks, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10)
         {
-            return await _context.Feedbacks.ToListAsync();
+            var TotalCount = await _context.Feedbacks.CountAsync();
+            var feedbacks = await _context.Feedbacks.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
+            return (feedbacks, TotalCount);
         }
 
         public async Task<Feedback> GetByIdAsync(int id)

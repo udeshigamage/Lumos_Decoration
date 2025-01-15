@@ -4,7 +4,7 @@ namespace Deco_Sara.Services
 {
     public interface IFeedbackService
     {
-        Task<IEnumerable<Feedback>> GetAllAsync();
+        Task<(IEnumerable<Feedback> feedbacks, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10);
         Task<Feedback> GetByIdAsync(int id);
 
         Task<Feedback> AddAsync(Feedback feedback);
