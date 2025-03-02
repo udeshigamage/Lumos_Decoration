@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    [Migration("20250114101828_MigrationNamert")]
-    partial class MigrationNamert
+    [Migration("20250302131441_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,28 @@ namespace Deco_Sara.Migrations
                     b.HasIndex("EmployeeEmp_ID");
 
                     b.ToTable("Allowances");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Category", b =>
+                {
+                    b.Property<int>("Category_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category_description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Category_image")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Category_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Category_Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Customer", b =>
@@ -106,6 +128,9 @@ namespace Deco_Sara.Migrations
                 {
                     b.Property<int>("Emp_ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<string>("email")
@@ -201,9 +226,6 @@ namespace Deco_Sara.Migrations
                     b.Property<int>("Customer_ID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Customer_ID1")
-                        .HasColumnType("int");
-
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -230,8 +252,6 @@ namespace Deco_Sara.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Order_ID");
-
-                    b.HasIndex("Customer_ID1");
 
                     b.ToTable("Order");
                 });
@@ -260,6 +280,40 @@ namespace Deco_Sara.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("Deco_Sara.Models.Product", b =>
+                {
+                    b.Property<int>("Product_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Category_Id")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Product_discount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Product_image")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Product_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Product_price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Subcategory_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Product_Id");
+
+                    b.HasIndex("Category_Id");
+
+                    b.HasIndex("Subcategory_Id");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("Deco_Sara.Models.Role", b =>
                 {
                     b.Property<int>("Roll_ID")
@@ -277,6 +331,33 @@ namespace Deco_Sara.Migrations
                     b.HasKey("Roll_ID");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Subcategory", b =>
+                {
+                    b.Property<int>("Subcategory_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Category_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subcategory_description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subcategory_image")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subcategory_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Subcategory_Id");
+
+                    b.HasIndex("Category_Id");
+
+                    b.ToTable("Subcategories");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.User", b =>
@@ -317,15 +398,34 @@ namespace Deco_Sara.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Deco_Sara.Models.Order", b =>
+            modelBuilder.Entity("Deco_Sara.Models.Product", b =>
                 {
-                    b.HasOne("Deco_Sara.Models.Customer", "Customer")
-                        .WithMany("orders")
-                        .HasForeignKey("Customer_ID1")
+                    b.HasOne("Deco_Sara.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("Category_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("Deco_Sara.Models.Subcategory", "Subcategory")
+                        .WithMany()
+                        .HasForeignKey("Subcategory_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Subcategory");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Subcategory", b =>
+                {
+                    b.HasOne("Deco_Sara.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("Category_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.User", b =>
@@ -333,11 +433,6 @@ namespace Deco_Sara.Migrations
                     b.HasOne("Deco_Sara.Models.Role", null)
                         .WithMany("Users")
                         .HasForeignKey("RoleRoll_ID");
-                });
-
-            modelBuilder.Entity("Deco_Sara.Models.Customer", b =>
-                {
-                    b.Navigation("orders");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Role", b =>
