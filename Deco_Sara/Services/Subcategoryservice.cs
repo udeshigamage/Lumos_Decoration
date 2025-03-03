@@ -32,14 +32,22 @@ namespace Deco_Sara.Services
             return await _context.Subcategories.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(int categoryId)
+        {
+            return await _context.Subcategories
+                .Where(sc => sc.Category_Id == categoryId)
+                .ToListAsync();
+        }
+
         public async Task<Subcategory> AddAsync(Subcategory subcategory)
         {
-            _context.Subcategories.Add(subcategory);
-            await _context.SaveChangesAsync();
-            return await _context.Subcategories
-                          .Include(s => s.Category) // Include Category data
-                          .FirstOrDefaultAsync(s => s.Subcategory_Id == subcategory.Subcategory_Id);
+            subcategory.Category = null;
+           _context.Subcategories.Add(subcategory);
+            _context.SaveChanges();
+            return subcategory;
         }
+
+
         public async Task<Subcategory?> UpdateAsync(int id, Subcategory updatedsubcategory)
         {
 

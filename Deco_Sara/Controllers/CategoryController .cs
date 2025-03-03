@@ -68,6 +68,34 @@ namespace Deco_Sara.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("category/categorylist")]
+
+        public async Task<IActionResult> GetcategoryList()
+        {
+            var categorys = await _categoryservice.Getcatlist();
+            var response = new
+            {
+                data = categorys.Select(v => new
+                {
+                    v.Category_name,
+                    v.Category_Id,
+                    v.Category_description,
+                    v.Category_image,
+                    
+
+
+
+
+
+
+                }),
+
+            };
+
+
+            return Ok(response);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Updatecategory(int id, Category category)
         {

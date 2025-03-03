@@ -16,9 +16,10 @@ namespace Deco_Sara.Services
 
         public async Task<(IEnumerable<Employee> Employees, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10)
         {
-            var totalCount = await _context.Employee.CountAsync();
+            var query = _context.Employee.Include(e => e.roll);
+            var totalCount = await query.CountAsync();
 
-            var employees = await _context.Employee
+            var employees = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -34,6 +35,7 @@ namespace Deco_Sara.Services
 
         public async Task<Employee> AddAsync(Employee employees)
         {
+            employees.roll = null;
             _context.Employee.Add(employees);
             await _context.SaveChangesAsync();
             return employees;
@@ -51,7 +53,8 @@ namespace Deco_Sara.Services
             existingEmployee.email = updatedEmployee.email;
             existingEmployee.emp_address = updatedEmployee.emp_address;
             existingEmployee.emp_Name = updatedEmployee.emp_Name;
-            existingEmployee.emp_Role = updatedEmployee.emp_Role;
+           existingEmployee.emp_image = updatedEmployee.emp_image;
+            existingEmployee.Roll_ID = updatedEmployee.Roll_ID;
             existingEmployee.emp_contact_no = updatedEmployee.emp_contact_no;
             existingEmployee.emp_allowance = updatedEmployee.emp_allowance;
 
@@ -78,8 +81,8 @@ namespace Deco_Sara.Services
             {
                 query = query.Where(e =>
                     e.emp_Name.Contains(search) ||
-                    e.emp_contact_no.Contains(search) ||
-                    e.emp_Role.Contains(search));
+                    e.emp_contact_no.Contains(search));
+                  
             }
 
             return await query.ToListAsync();

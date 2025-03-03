@@ -22,7 +22,25 @@ namespace Deco_Sara.Controllers
 
             var response = new
             {
-                data = employees,
+                data = employees.Select(v => new
+                {
+                    v.email,
+                    v.nic,
+                    v.emp_Name,
+                    v.emp_address,
+                    v.emp_allowance,
+                    v.emp_contact_no,
+                    v.emp_image,
+                    v.Emp_ID,
+                   
+                    v.roll.Roll_ID,
+                    v.roll.Roll_Name
+
+
+
+
+
+                }),
                 totalItems = totalCount,
                 totalPages = (int)Math.Ceiling((double)totalCount / pageSize),
                 currentPage = page

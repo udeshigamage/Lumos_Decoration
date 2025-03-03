@@ -31,6 +31,8 @@ builder.Services.AddScoped<ICategoryservice,Categoriesservice>();
 
 builder.Services.AddScoped<IProductservice,Productservice>();
 
+builder.Services.AddScoped<IRoleservices, Roleservices>();
+
 
 builder.Services.AddCors(options =>
 {

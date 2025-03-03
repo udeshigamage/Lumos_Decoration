@@ -22,43 +22,56 @@ namespace Deco_Sara.Services
             return (categorys, TotalCount);
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<List<Product>> Getcatlist(int subcatid)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                                 .Include(p => p.Category)
+                                 .Include(p => p.Subcategory)
+                                 .Where(p => p.Subcategory_Id == subcatid) 
+                                 .ToListAsync();
         }
+
+
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Subcategory)
+                .FirstOrDefaultAsync(p => p.Product_Id == id);
+        }
+
 
         public async Task<Product> AddAsync(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return await _context.Products
-    .Include(p => p.Subcategory)    // Include the Subcategory data
-        .ThenInclude(subcategory => subcategory.Category)  // Include the Category data within the Subcategory
-    .FirstOrDefaultAsync(p => p.Product_Id == product.Product_Id);
 
+            product.Category = null;
+            product.Subcategory = null;
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return product;
         }
+
         public async Task<Product?> UpdateAsync(int id, Product updatedproduct)
         {
+            var existingProduct = await _context.Products.FindAsync(id);
+            if (existingProduct == null) return null;
 
-            var existingProducts = await _context.Products.FindAsync(id);
-            if (existingProducts == null)
-            {
-                return null;
-            }
+            existingProduct.Product_name = updatedproduct.Product_name;
+            existingProduct.Product_price = updatedproduct.Product_price;
+            existingProduct.Product_image = updatedproduct.Product_image;
+            existingProduct.Product_discount = updatedproduct.Product_discount;
 
-            existingProducts.Product_name = updatedproduct.Product_name;
-            existingProducts.Product_price = updatedproduct.Product_price;
-            existingProducts.Product_image = updatedproduct.Product_image;
-            existingProducts.Product_discount = updatedproduct.Product_discount;
-            existingProducts.Category_Id = updatedproduct.Category_Id;
-            existingProducts.Subcategory_Id = updatedproduct.Subcategory_Id;
+            // Fetch and assign Category & Subcategory
+            existingProduct.Category = await _context.Categories.FindAsync(updatedproduct.Category_Id);
+            existingProduct.Subcategory = await _context.Subcategories.FindAsync(updatedproduct.Subcategory_Id);
 
-
+            existingProduct.Category_Id = updatedproduct.Category_Id;
+            existingProduct.Subcategory_Id = updatedproduct.Subcategory_Id;
 
             await _context.SaveChangesAsync();
-
-            return existingProducts;
+            return existingProduct;
         }
+
 
         public async Task<bool> DeleteAsync(int id)
         {

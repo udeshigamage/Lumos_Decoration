@@ -64,20 +64,7 @@ namespace Deco_Sara.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<IEnumerable<Customer>> GetAllSearchAsync(string search)
-        {
-            var query = _context.Customer.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(e =>
-                    e.Name.Contains(search) ||
-                    e.contactno.Contains(search) ||
-                    e.address.Contains(search));
-            }
-
-            return await query.ToListAsync();
-        }
+       
 
 
     }

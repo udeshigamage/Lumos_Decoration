@@ -29,25 +29,28 @@ namespace Deco_Sara.Controllers
                     v.Product_discount,
                     v.Product_image,
 
+                    Category = new
+                    {
+                        v.Category.Category_Id,
+                       
+                        v.Category.Category_description,
+                        v.Category.Category_image,
+                        
 
-
+                    },
 
                     Subcategory = new
                     {
-                        v.Subcategory.Subcategory_name,
-                        v.Subcategory.Subcategory_image,
                         v.Subcategory.Subcategory_Id,
-                        v.Subcategory.Subcategory_description
-
-
+                        v.Subcategory.Subcategory_name,
+                        v.Subcategory.Subcategory_description,
+                        v.Subcategory.Subcategory_image,
+                        v.Subcategory.Category_Id,
                     },
-                    Category = new
-                    {
-                        v.Subcategory.Category.Category_name,
-                        v.Subcategory.Category.Category_Id,
-                        v.Subcategory.Category.Category_description,
-                        v.Subcategory.Category.Category_image,
-                    }
+
+
+                   
+                    
 
                 }),
                 totalItems = totalcount,
@@ -84,6 +87,36 @@ namespace Deco_Sara.Controllers
             }
 
             return Ok(updatedproduct);
+        }
+
+        [HttpGet("subcategory/product/{subcategoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int subcategoryId)
+        {
+            var products = await _productService.Getcatlist(subcategoryId);
+
+            var response = new
+            {
+                data = products.Select(v => new
+                {
+                    v.Product_name,
+                    v.Product_Id,
+                    v.Product_image,
+                    v.Product_price,
+                    v.Product_discount,
+                    v.Subcategory_Id,
+                    v.Category_Id,
+
+
+
+
+
+
+                }),
+
+            };
+
+
+            return Ok(response);
         }
 
 

@@ -7,8 +7,8 @@ namespace Deco_Sara.Services
         Task<(IEnumerable<Subcategory> subcategorys, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10);
 
         Task<List<Subcategory>> GetSubcatlist();
-        
 
+        Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(int categoryId);
         Task<Subcategory> GetByIdAsync(int id);
 
         Task<Subcategory> AddAsync(Subcategory subcategory);
@@ -17,6 +17,6 @@ namespace Deco_Sara.Services
 
         Task<bool> DeleteAsync(int id);
 
-        Task<IEnumerable<Subcategory>> GetAllSearchAsync(string? search = null);
+       
     }
 }

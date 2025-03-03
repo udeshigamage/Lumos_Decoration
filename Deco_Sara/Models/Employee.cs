@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Deco_Sara.Models
 {
@@ -14,12 +15,24 @@ namespace Deco_Sara.Models
 
         public string email { get; set; }
 
-        public string emp_Role { get; set; }
+        
 
         public string emp_contact_no { get; set; }
 
+        public string? emp_image { get; set; }
+
+        public string nic { get; set; }
+
+
         public decimal emp_allowance { get; set; } = 0.00M;
 
-        public int Order_ID { get; set; }
+        
+
+        [ForeignKey("roll")]
+
+        public int Roll_ID { get; set; }
+
+        [ValidateNever]
+        public Roll roll { get; set; }
     }
 }

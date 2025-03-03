@@ -32,6 +32,8 @@ namespace Deco_Sara.dbcontext__
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Roll> roll { get; set; }
+
 
 
     }

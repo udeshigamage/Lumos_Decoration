@@ -13,7 +13,7 @@ namespace Deco_Sara.Services
 
         Task<bool> DeleteAsync(int id);
 
-        Task<IEnumerable<Employee>> GetAllSearchAsync(string? search = null);
+        
 
     }
 }

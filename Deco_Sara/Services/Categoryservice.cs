@@ -25,6 +25,7 @@ namespace Deco_Sara.Services
             return await _context.Categories.ToListAsync();
         }
 
+
         public async Task<Category> GetByIdAsync(int id)
         {
             return await _context.Categories.FindAsync(id);

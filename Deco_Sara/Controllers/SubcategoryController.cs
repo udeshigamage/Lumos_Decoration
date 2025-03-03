@@ -62,6 +62,57 @@ namespace Deco_Sara.Controllers
             if (Subcategorys == null) return NotFound();
             return Ok(Subcategorys);
         }
+        [HttpGet("subcategory/category/{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
+        {
+            var Subcategorys = await _SubcategoryService.GetSubcategoriesByCategoryIdAsync(categoryId);
+
+            var response = new
+            {
+                data = Subcategorys.Select(v => new
+                {
+                    v.Subcategory_name,
+                    v.Subcategory_Id,
+
+
+
+
+
+
+                }),
+
+            };
+
+
+            return Ok(response);
+        }
+
+        [HttpGet("subcategory/category/list/{categoryId}")]
+        public async Task<IActionResult> GetByategoryId(int categoryId)
+        {
+            var Subcategorys = await _SubcategoryService.GetSubcategoriesByCategoryIdAsync(categoryId);
+
+            var response = new
+            {
+                data = Subcategorys.Select(v => new
+                {
+                    v.Subcategory_name,
+                    v.Subcategory_Id,
+                    v.Subcategory_image,
+                    v.Subcategory_description
+
+
+
+
+
+
+                }),
+
+            };
+
+
+            return Ok(response);
+        }
 
         [HttpGet("Subcategorylist")]
 
