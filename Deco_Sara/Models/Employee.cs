@@ -28,11 +28,11 @@ namespace Deco_Sara.Models
 
         
 
-        [ForeignKey("roll")]
+        [ForeignKey("role")]
 
-        public int Roll_ID { get; set; }
+        public int Role_ID { get; set; }
 
         [ValidateNever]
-        public Roll roll { get; set; }
+        public Role role { get; set; }
     }
 }

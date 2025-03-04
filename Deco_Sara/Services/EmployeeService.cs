@@ -16,7 +16,7 @@ namespace Deco_Sara.Services
 
         public async Task<(IEnumerable<Employee> Employees, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10)
         {
-            var query = _context.Employee.Include(e => e.roll);
+            var query = _context.Employee.Include(e => e.role);
             var totalCount = await query.CountAsync();
 
             var employees = await query
@@ -35,7 +35,7 @@ namespace Deco_Sara.Services
 
         public async Task<Employee> AddAsync(Employee employees)
         {
-            employees.roll = null;
+            employees.role = null;
             _context.Employee.Add(employees);
             await _context.SaveChangesAsync();
             return employees;
@@ -54,7 +54,7 @@ namespace Deco_Sara.Services
             existingEmployee.emp_address = updatedEmployee.emp_address;
             existingEmployee.emp_Name = updatedEmployee.emp_Name;
            existingEmployee.emp_image = updatedEmployee.emp_image;
-            existingEmployee.Roll_ID = updatedEmployee.Roll_ID;
+            existingEmployee.Role_ID = updatedEmployee.Role_ID;
             existingEmployee.emp_contact_no = updatedEmployee.emp_contact_no;
             existingEmployee.emp_allowance = updatedEmployee.emp_allowance;
 

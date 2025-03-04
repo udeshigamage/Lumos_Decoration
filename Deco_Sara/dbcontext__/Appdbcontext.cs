@@ -21,7 +21,7 @@ namespace Deco_Sara.dbcontext__
         public DbSet<Order> Order { get; set; }
 
         public DbSet<Feedback> Feedbacks { get; set; }
-        
+        public DbSet<Role> role { get; set; }
 
         public DbSet<Employee>Employee {  get; set; }
         public DbSet<Notification> notifications { get; set; }
@@ -32,7 +32,7 @@ namespace Deco_Sara.dbcontext__
 
         public DbSet<Product> Products { get; set; }
 
-        public DbSet<Roll> roll { get; set; }
+       
 
 
 

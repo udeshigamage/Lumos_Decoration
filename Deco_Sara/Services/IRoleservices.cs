@@ -4,13 +4,13 @@ namespace Deco_Sara.Services
 {
     public interface IRoleservices
     {
-        Task<List<Roll>> GetSubcatlist();
-        Task<(IEnumerable<Roll> Roles, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10);
-        Task<Roll> GetByIdAsync(int id);
+        Task<List<Role>> GetSubcatlist();
+        Task<(IEnumerable<Role> Roles, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10);
+        Task<Role> GetByIdAsync(int id);
 
-        Task<Roll> AddAsync(Roll roles);
+        Task<Role> AddAsync(Role roles);
 
-        Task<Roll?> UpdateAsync(int id, Roll roles);
+        Task<Role?> UpdateAsync(int id, Role roles);
 
         Task<bool> DeleteAsync(int id);
 

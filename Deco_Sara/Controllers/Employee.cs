@@ -33,8 +33,8 @@ namespace Deco_Sara.Controllers
                     v.emp_image,
                     v.Emp_ID,
                    
-                    v.roll.Roll_ID,
-                    v.roll.Roll_Name
+                    v.role.Role_ID,
+                    v.role.Role_Name
 
 
 

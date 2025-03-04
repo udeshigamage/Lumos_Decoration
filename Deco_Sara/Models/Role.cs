@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Deco_Sara.Models
 {
-    public class Roll
+    public class Role
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Roll_ID { get; set; }
+        public int Role_ID { get; set; }
        
-        public string Roll_Name { get; set; }
+        public string Role_Name { get; set; }
         
        
 

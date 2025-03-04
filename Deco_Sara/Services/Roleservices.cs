@@ -12,17 +12,17 @@ namespace Deco_Sara.Services
         {
             _context = context;
         }
-        public async Task<List<Roll>> GetSubcatlist()
+        public async Task<List<Role>> GetSubcatlist()
         {
 
-            return await _context.roll.ToListAsync();
+            return await _context.role.ToListAsync();
         }
 
-        public async Task<(IEnumerable<Roll> Roles, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10)
+        public async Task<(IEnumerable<Role> Roles, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10)
         {
-            var totalCount = await _context.roll.CountAsync();
+            var totalCount = await _context.role.CountAsync();
 
-            var Role = await _context.roll
+            var Role = await _context.role
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -31,28 +31,28 @@ namespace Deco_Sara.Services
         }
 
 
-        public async Task<Roll> GetByIdAsync(int id)
+        public async Task<Role> GetByIdAsync(int id)
         {
-            return await _context.roll.FindAsync(id);
+            return await _context.role.FindAsync(id);
         }
 
-        public async Task<Roll> AddAsync(Roll Role)
+        public async Task<Role> AddAsync(Role Role)
         {
-            _context.roll.Add(Role);
+            _context.role.Add(Role);
             await _context.SaveChangesAsync();
             return Role;
         }
-        public async Task<Roll?> UpdateAsync(int id, Roll updatedRole)
+        public async Task<Role?> UpdateAsync(int id, Role updatedRole)
         {
             // Find the employee in the database
-            var existingRole = await _context.roll.FindAsync(id);
+            var existingRole = await _context.role.FindAsync(id);
             if (existingRole == null)
             {
                 return null; // Return null if the employee doesn't exist
             }
 
             // Update the employee fields
-            existingRole.Roll_Name = updatedRole.Roll_Name;
+            existingRole.Role_Name = updatedRole.Role_Name;
            
 
             // Save changes to the database
@@ -63,10 +63,10 @@ namespace Deco_Sara.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var Role = await _context.roll.FindAsync(id);
+            var Role = await _context.role.FindAsync(id);
             if (Role == null) return false;
 
-            _context.roll.Remove(Role);
+            _context.role.Remove(Role);
             await _context.SaveChangesAsync();
             return true;
         }

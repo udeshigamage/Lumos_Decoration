@@ -40,8 +40,8 @@ namespace Deco_Sara.Controllers
             {
                 data = roles.Select(v => new
                 {
-                    v.Roll_ID,
-                    v.Roll_Name,
+                    v.Role_ID,
+                    v.Role_Name,
                 }),
 
             };
@@ -59,14 +59,14 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Roll roles)
+        public async Task<IActionResult> Add(Role roles)
         {
             var newRole = await _roleservices.AddAsync(roles);
-            return CreatedAtAction(nameof(GetById), new { id = newRole.Roll_ID }, newRole);
+            return CreatedAtAction(nameof(GetById), new { id = newRole.Role_ID }, newRole);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEmployee(int id, Roll roles)
+        public async Task<IActionResult> UpdateEmployee(int id, Role roles)
         {
             var updatedRoles = await _roleservices.UpdateAsync(id, roles);
 
