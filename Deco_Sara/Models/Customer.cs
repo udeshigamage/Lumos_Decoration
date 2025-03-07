@@ -11,12 +11,19 @@ namespace Deco_Sara.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int  Customer_ID { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string Customer_name { get; set; }
+        public string Customer_email { get; set; }
 
-        public string contactno { get; set; }
+        public string Customer_contact_no { get; set; }
 
-        public string address { get; set; }
+        public string Customer_address { get; set; }
+
+        public  string Password { get; set; }
+
+
+       public ICollection<Order> Orders { get; set; }
+        
+
     }
 
   }

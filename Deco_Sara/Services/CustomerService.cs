@@ -42,10 +42,10 @@ namespace Deco_Sara.Services
             }
 
             // Update the employee fields
-            existingCustomer.address = updatedCustomer.address;
-            existingCustomer.Name = updatedCustomer.Name;
-            existingCustomer.Email = updatedCustomer.Email;
-            existingCustomer.contactno = updatedCustomer.contactno;
+            existingCustomer.Customer_email = updatedCustomer.Customer_email;
+            existingCustomer.Customer_name = updatedCustomer.Customer_name;
+            existingCustomer.Customer_address = updatedCustomer.Customer_address;
+            existingCustomer.Customer_contact_no = updatedCustomer.Customer_contact_no;
 
 
 

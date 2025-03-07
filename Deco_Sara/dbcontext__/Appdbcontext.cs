@@ -18,7 +18,7 @@ namespace Deco_Sara.dbcontext__
 
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Order> Order { get; set; }
+        //public DbSet<Order> Order { get; set; }
 
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Role> role { get; set; }
@@ -30,9 +30,13 @@ namespace Deco_Sara.dbcontext__
 
         public DbSet<Subcategory> Subcategories { get; set; }
 
+        //public DbSet<Product> Products { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Orderitem> OrderItems { get; set; }
 
-       
+
 
 
 

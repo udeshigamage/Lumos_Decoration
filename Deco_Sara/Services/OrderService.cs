@@ -44,37 +44,37 @@ namespace Deco_Sara.Services
         public async Task<int> GetPendingOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.status == "pending")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "pending")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.status == "To Accept")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "To Accept")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync()
         {
             return await _context.Order
-                .Where(order =>  order.status == "To Accept")
+                .Where(order =>  order.Order_status == "To Accept")
                 .CountAsync();
         }
         public async Task<int> GetCompletedOrdersCountAsync()
         {
             return await _context.Order
-                .Where(order => order.status == "Completed")
+                .Where(order => order.Order_status == "Completed")
                 .CountAsync();
         }
         public async Task<int> GetPendingOrdersCountAsync()
         {
             return await _context.Order
-                .Where(order => order.status == "pending")
+                .Where(order => order.Order_status == "pending")
                 .CountAsync();
         }
         public async Task<int> GetCompletedOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.status == "Completed")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "Completed")
                 .CountAsync();
         }
 
@@ -99,8 +99,8 @@ namespace Deco_Sara.Services
             }
 
             // Update the employee fields
-            existingOrder.status = updatedOrder.status;
-            existingOrder.deadlinedate= updatedOrder.deadlinedate;
+            existingOrder.Order_allowance_status = updatedOrder.Order_allowance_status;
+            existingOrder.Order_payment_status= updatedOrder.Order_payment_status;
             existingOrder.TotalCost = updatedOrder.TotalCost;           
 
             // Save changes to the database

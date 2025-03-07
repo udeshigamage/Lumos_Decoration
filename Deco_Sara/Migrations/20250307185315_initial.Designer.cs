@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    [Migration("20250304061917_initial")]
+    [Migration("20250307185315_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -78,19 +78,23 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Customer_address")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Customer_contact_no")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("address")
+                    b.Property<string>("Customer_email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("contactno")
+                    b.Property<string>("Customer_name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -231,34 +235,58 @@ namespace Deco_Sara.Migrations
                     b.Property<int>("Customer_ID")
                         .HasColumnType("int");
 
-                    b.Property<string>("EventType")
+                    b.Property<decimal>("Order_allowance")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<bool>("Order_allowance_status")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("Order_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Order_deadlinedate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Order_description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Order_payment_status")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Order_status")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("TotalCost")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<DateTime>("deadlinedate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("location")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("order_date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("orderdescription")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("Order_ID");
 
+                    b.HasIndex("Customer_ID");
+
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Orderitem", b =>
+                {
+                    b.Property<int>("Orderitem_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Product_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Orderitem_Id");
+
+                    b.HasIndex("Order_ID");
+
+                    b.HasIndex("Product_ID");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Payment", b =>
@@ -405,6 +433,36 @@ namespace Deco_Sara.Migrations
                     b.Navigation("role");
                 });
 
+            modelBuilder.Entity("Deco_Sara.Models.Order", b =>
+                {
+                    b.HasOne("Deco_Sara.Models.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("Customer_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Orderitem", b =>
+                {
+                    b.HasOne("Deco_Sara.Models.Order", "Order")
+                        .WithMany("Orderitems")
+                        .HasForeignKey("Order_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Deco_Sara.Models.Product", "Product")
+                        .WithMany("Orderitems")
+                        .HasForeignKey("Product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Deco_Sara.Models.Product", b =>
                 {
                     b.HasOne("Deco_Sara.Models.Category", "Category")
@@ -433,6 +491,21 @@ namespace Deco_Sara.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Order", b =>
+                {
+                    b.Navigation("Orderitems");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Product", b =>
+                {
+                    b.Navigation("Orderitems");
                 });
 #pragma warning restore 612, 618
         }

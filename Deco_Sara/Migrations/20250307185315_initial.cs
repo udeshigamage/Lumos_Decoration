@@ -40,13 +40,15 @@ namespace Deco_Sara.Migrations
                 {
                     Customer_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Customer_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    Customer_email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    contactno = table.Column<string>(type: "longtext", nullable: false)
+                    Customer_contact_no = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    address = table.Column<string>(type: "longtext", nullable: false)
+                    Customer_address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -111,31 +113,6 @@ namespace Deco_Sara.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_notifications", x => x.Notification_ID);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    Order_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EventType = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    order_date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    orderdescription = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    deadlinedate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    location = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    status = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Customer_ID = table.Column<int>(type: "int", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.Order_ID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -212,6 +189,36 @@ namespace Deco_Sara.Migrations
                         column: x => x.Category_Id,
                         principalTable: "Categories",
                         principalColumn: "Category_Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Order_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Order_date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Order_description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Order_deadlinedate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Order_allowance = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Order_payment_status = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Order_allowance_status = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Order_status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Customer_ID = table.Column<int>(type: "int", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Order_ID);
+                    table.ForeignKey(
+                        name: "FK_Order_Customer_Customer_ID",
+                        column: x => x.Customer_ID,
+                        principalTable: "Customer",
+                        principalColumn: "Customer_ID",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -306,6 +313,33 @@ namespace Deco_Sara.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Orderitem_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Order_ID = table.Column<int>(type: "int", nullable: false),
+                    Product_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Orderitem_Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Order_Order_ID",
+                        column: x => x.Order_ID,
+                        principalTable: "Order",
+                        principalColumn: "Order_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Products_Product_ID",
+                        column: x => x.Product_ID,
+                        principalTable: "Products",
+                        principalColumn: "Product_Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Allowances_EmployeeEmp_ID",
                 table: "Allowances",
@@ -315,6 +349,21 @@ namespace Deco_Sara.Migrations
                 name: "IX_Employee_Role_ID",
                 table: "Employee",
                 column: "Role_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_Customer_ID",
+                table: "Order",
+                column: "Customer_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_Order_ID",
+                table: "OrderItems",
+                column: "Order_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_Product_ID",
+                table: "OrderItems",
+                column: "Product_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Category_Id",
@@ -339,9 +388,6 @@ namespace Deco_Sara.Migrations
                 name: "Allowances");
 
             migrationBuilder.DropTable(
-                name: "Customer");
-
-            migrationBuilder.DropTable(
                 name: "Decorationstatuses");
 
             migrationBuilder.DropTable(
@@ -351,13 +397,10 @@ namespace Deco_Sara.Migrations
                 name: "notifications");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "Payments");
-
-            migrationBuilder.DropTable(
-                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -366,10 +409,19 @@ namespace Deco_Sara.Migrations
                 name: "Employee");
 
             migrationBuilder.DropTable(
-                name: "Subcategories");
+                name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "Subcategories");
 
             migrationBuilder.DropTable(
                 name: "Categories");
