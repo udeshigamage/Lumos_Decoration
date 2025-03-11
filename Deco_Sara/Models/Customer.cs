@@ -21,8 +21,9 @@ namespace Deco_Sara.Models
         public  string Password { get; set; }
 
 
-       public ICollection<Order> Orders { get; set; }
+       public ICollection<Order>? Orders { get; set; }
         
+
 
     }
 

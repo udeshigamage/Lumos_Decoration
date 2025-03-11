@@ -18,20 +18,20 @@ namespace Deco_Sara.Services
 
         public async Task<(IEnumerable<Order> Order, int TotalCount)> GetAllOrdersAsync(int page = 1, int pageSize = 10)
         {
-            var totalCount = await _context.Order.CountAsync();
+            var query =  _context.Order.Include(order => order.Orderitems).ThenInclude(Orderitem => Orderitem.Product).Include(order => order.Customer);
+            var totalCount = await query.CountAsync();
 
-            var Order = await _context.Order
+            var Order = await query
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
+                .Take(pageSize).ToListAsync();
+                
             return (Order, totalCount);
         }
 
         
 
 
-        // Query to get the count of pending orders for the specified customer
+        
 
 
         public async Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId)
@@ -82,31 +82,78 @@ namespace Deco_Sara.Services
         {
             return await _context.Order.FindAsync(id);
         }
-
-        public async Task<Order> AddAsync(Order order)
+        public async Task<int> AddAsync(int Customer_ID, List<OrderitemDTO> orderitems, OrderDTO order)
         {
-            _context.Order.Add(order);
-            await _context.SaveChangesAsync();
-            return order;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+               
+                var orders = new Order
+                {
+                    Customer_ID = Customer_ID,
+                    Order_date = DateTime.Now,
+                    Order_allowance = order.Order_allowance,
+                    Order_status = order.Order_status,
+                    Order_description = order.Order_description,
+                    Order_allowance_status = order.Order_allowance_status,
+                    Order_payment_status = order.Order_payment_status,
+                    TotalCost = order.TotalCost
+                };
+
+                
+                _context.Order.Add(orders);
+                await _context.SaveChangesAsync(); 
+               
+                foreach (var item in orderitems)
+                {
+                    var product = await _context.Products.FindAsync(item.Product_ID);
+                    if (product == null)
+                    {
+                        throw new Exception($"Product {item.Product_ID} not found.");
+                    }
+
+                   
+                    var orderItem = new Orderitem
+                    {
+                        Order_ID = orders.Order_ID, 
+                        Product_ID = item.Product_ID,
+                        quantity = item.quantity
+                    };
+
+                    _context.OrderItems.Add(orderItem);
+                }
+
+                await _context.SaveChangesAsync(); 
+                await transaction.CommitAsync();
+
+                return orders.Order_ID; 
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
+
+
         public async Task<Order?> UpdateAsync(int id, Order updatedOrder)
         {
-            // Find the employee in the database
+            
             var existingOrder = await _context.Order.FindAsync(id);
             if (existingOrder == null)
             {
-                return null; // Return null if the employee doesn't exist
+                return null; 
             }
 
-            // Update the employee fields
+            
             existingOrder.Order_allowance_status = updatedOrder.Order_allowance_status;
             existingOrder.Order_payment_status= updatedOrder.Order_payment_status;
             existingOrder.TotalCost = updatedOrder.TotalCost;           
 
-            // Save changes to the database
+            
             await _context.SaveChangesAsync();
 
-            return existingOrder; // Return the updated employee
+            return existingOrder; 
         }
 
         public async Task<bool> DeleteAsync(int id)

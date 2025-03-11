@@ -1,6 +1,7 @@
 ﻿using Deco_Sara.Models;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Deco_Sara.Controllers
@@ -17,22 +18,51 @@ namespace Deco_Sara.Controllers
                 _orderService = orderService;
             }
 
-            [HttpGet]
-            public async Task<IActionResult> GetAll(int page=1,int pagesize=10)
-            {
-                var (Order,totalCount) = await _orderService.GetAllOrdersAsync(page,pagesize);
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
+        {
+            var (orders, totalCount) = await _orderService.GetAllOrdersAsync(page, pageSize);
 
             var response = new
             {
-                data = Order,
+                data = orders.Select(v => new
+                {
+                    v.Order_ID,
+                    v.Order_deadlinedate,
+                    v.Order_allowance,
+                    v.Order_allowance_status,
+                    v.Order_date,
+                    v.Order_payment_status,
+                    v.Order_status,
+                    v.Order_description,
+                    v.TotalCost,
+                    
+                    Customer = new
+                    {
+                        v.Customer.Customer_ID,
+                        v.Customer.Customer_name,
+                        v.Customer.Customer_email,
+                        v.Customer.Customer_address
+                        , // Add any other customer properties you need
+                    },
+                    OrderItems = v.Orderitems.Select(oi => new
+                    {
+                        oi.Order_ID,
+                        oi.Product_ID,
+                        oi.quantity
+                    }),
+                }),
+
                 totalItems = totalCount,
-                totalPages = (int)Math.Ceiling((double)totalCount / pagesize),
+                totalPages = (int)Math.Ceiling((double)totalCount / pageSize),
                 currentPage = page
             };
-            return Ok(response);
-            }
 
-            [HttpGet("{id}")]
+            return Ok(response);
+        }
+
+
+        [HttpGet("{id}")]
             public async Task<IActionResult> GetById(int id)
             {
                 var order = await _orderService.GetByIdAsync(id);
@@ -40,14 +70,22 @@ namespace Deco_Sara.Controllers
                 return Ok(order);
             }
 
-            [HttpPost]
-            public async Task<IActionResult> Add(Order order)
-            {
-                var newOrder = await _orderService.AddAsync(order);
-                return CreatedAtAction(nameof(GetById), new { id = newOrder.Order_ID }, newOrder);
-            }
 
-            [HttpPut("{id}")]
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] Orderrequest request)
+        {
+            if (request == null || request.orderitems?.Count == 0 || request.order == null)
+                return BadRequest("Invalid order data");
+
+            var orderId = await _orderService.AddAsync(request.Customer_ID, request.orderitems, request.order);
+            return Ok(new { OrderId = orderId, Message = "Order created successfully" });
+        }
+
+
+
+
+
+        [HttpPut("{id}")]
             public async Task<IActionResult> UpdateOrder(int id, Order order)
             {
                 var updatedOrder = await _orderService.UpdateAsync(id, order);

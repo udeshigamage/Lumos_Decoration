@@ -29,7 +29,7 @@ namespace Deco_Sara.Models
         [ValidateNever]
         public Category Category { get; set; }
 
-       public ICollection<Orderitem> Orderitems { get; set; }
+       public ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
 
 
     }
