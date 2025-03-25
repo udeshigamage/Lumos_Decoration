@@ -11,7 +11,7 @@ namespace Deco_Sara.dbcontext__
         }
 
         public DbSet<Customer> Customer { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserDTO> Users { get; set; }
 
         public DbSet<Allowance> Allowances { get; set; }
         public DbSet<Decorationstatus>Decorationstatuses { get; set; }

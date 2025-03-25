@@ -13,5 +13,9 @@ namespace Deco_Sara.Models
         public string Category_description { get; set; }
 
         public string? Category_image { get; set; }
+
+        public ICollection<Subcategory> subcategories { get; set; }
     }
+
+   
 }
