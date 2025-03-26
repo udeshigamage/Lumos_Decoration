@@ -2,8 +2,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Deco_Sara.Models
+    
 {
-    public class UserDTO
+    [Table("Tb_Users")]
+    public class User
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

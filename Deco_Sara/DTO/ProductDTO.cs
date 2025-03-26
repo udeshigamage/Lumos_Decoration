@@ -22,9 +22,7 @@ namespace Deco_Sara.DTO
       
         public int Category_Id { get; set; }
         
-        public SubcategoryDTO Subcategory { get; set; }
-        
-        public CategoryDTO Category { get; set; }
+       
 
        public ICollection<OrderitemDTO> Orderitems { get; set; } = new List<OrderitemDTO>();
 

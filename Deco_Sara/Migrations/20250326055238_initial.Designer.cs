@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    [Migration("20250308092509_yu")]
-    partial class yu
+    [Migration("20250326055238_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,7 +274,7 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Order_ID")
+                    b.Property<int?>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<int>("Product_ID")
@@ -398,6 +398,24 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Contact_no")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastUpdatedTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -406,12 +424,12 @@ namespace Deco_Sara.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Role_ID")
+                    b.Property<int>("usertype")
                         .HasColumnType("int");
 
                     b.HasKey("User_ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Tb_Users");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Allowance", b =>
@@ -451,9 +469,7 @@ namespace Deco_Sara.Migrations
                 {
                     b.HasOne("Deco_Sara.Models.Order", "Order")
                         .WithMany("Orderitems")
-                        .HasForeignKey("Order_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Order_ID");
 
                     b.HasOne("Deco_Sara.Models.Product", "Product")
                         .WithMany("Orderitems")
@@ -475,7 +491,7 @@ namespace Deco_Sara.Migrations
                         .IsRequired();
 
                     b.HasOne("Deco_Sara.Models.Subcategory", "Subcategory")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("Subcategory_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -488,12 +504,17 @@ namespace Deco_Sara.Migrations
             modelBuilder.Entity("Deco_Sara.Models.Subcategory", b =>
                 {
                     b.HasOne("Deco_Sara.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("subcategories")
                         .HasForeignKey("Category_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Category", b =>
+                {
+                    b.Navigation("subcategories");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Customer", b =>
@@ -509,6 +530,11 @@ namespace Deco_Sara.Migrations
             modelBuilder.Entity("Deco_Sara.Models.Product", b =>
                 {
                     b.Navigation("Orderitems");
+                });
+
+            modelBuilder.Entity("Deco_Sara.Models.Subcategory", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

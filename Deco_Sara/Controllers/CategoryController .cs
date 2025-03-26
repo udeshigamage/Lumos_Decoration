@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Deco_Sara.Models;
 using Deco_Sara.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Deco_Sara.Controllers
 {
@@ -15,6 +16,7 @@ namespace Deco_Sara.Controllers
             _categoryservice = categoryservice;
         }
 
+        [Authorize] 
         [HttpGet]
         public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10)
         {

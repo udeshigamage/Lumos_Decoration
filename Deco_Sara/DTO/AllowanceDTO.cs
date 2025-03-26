@@ -11,7 +11,6 @@ namespace Deco_Sara.DTO
         public int Emp_ID { get; set; }  // Foreign Key
         public int Order_ID { get; set; }  // Foreign Key
 
-        // Navigation property to Employee
-        public EmployeeDTO Employee { get; set; }
+        
     }
 }

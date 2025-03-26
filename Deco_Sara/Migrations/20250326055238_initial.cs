@@ -150,20 +150,28 @@ namespace Deco_Sara.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Tb_Users",
                 columns: table => new
                 {
                     User_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Contact_no = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     PasswordHash = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Role_ID = table.Column<int>(type: "int", nullable: false)
+                    usertype = table.Column<int>(type: "int", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.User_ID);
+                    table.PrimaryKey("PK_Tb_Users", x => x.User_ID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -319,7 +327,8 @@ namespace Deco_Sara.Migrations
                 {
                     Orderitem_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Order_ID = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Order_ID = table.Column<int>(type: "int", nullable: true),
                     Product_ID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -329,8 +338,7 @@ namespace Deco_Sara.Migrations
                         name: "FK_OrderItems_Order_Order_ID",
                         column: x => x.Order_ID,
                         principalTable: "Order",
-                        principalColumn: "Order_ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Order_ID");
                     table.ForeignKey(
                         name: "FK_OrderItems_Products_Product_ID",
                         column: x => x.Product_ID,
@@ -403,7 +411,7 @@ namespace Deco_Sara.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Tb_Users");
 
             migrationBuilder.DropTable(
                 name: "Employee");
