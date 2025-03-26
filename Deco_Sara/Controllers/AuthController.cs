@@ -9,11 +9,13 @@ namespace Deco_Sara.Controllers
     {
         private readonly Appdbcontext _context;
         private readonly AuthService _authService;
+        private readonly IConfiguration _configuration;
         
-        public AuthController(Appdbcontext context, AuthService authService)
+        public AuthController(Appdbcontext context, AuthService authService,IConfiguration configuration)
         {
             _context = context;
             _authService = authService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -24,6 +26,7 @@ namespace Deco_Sara.Controllers
             {
                 return Unauthorized(new { message = "unauthorized" });
             }
+            
             var token = _authService.Generatetoken(user);
             return Ok(token);
         }

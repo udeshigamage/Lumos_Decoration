@@ -7,6 +7,7 @@ namespace Deco_Sara.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryservice _categoryservice;
@@ -16,8 +17,9 @@ namespace Deco_Sara.Controllers
             _categoryservice = categoryservice;
         }
 
-        [Authorize] 
+        
         [HttpGet]
+        
         public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10)
         {
             var (categorys, totalcount) = await _categoryservice.GetAllAsync(page, pagesize);
