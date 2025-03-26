@@ -14,39 +14,56 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<Message<string>> Createuserasync(CreateUserDTO createUser)
+        public async Task<Message<string>> Createuserasync(CreateUserDTO User)
         {
             try
             {
 
-                bool isexist = await _context.Users.AnyAsync(c => c.Email == createUser.Email);
-                if (isexist)
+                if (User == null)
+                {
+
+                    return new Message<string>
+                    {
+                        Status = "E",
+                        Text = "Data is empty"
+                    };
+
+                }
+
+                bool existemail = await _context.Users.AnyAsync(u => u.Email == User.Email);
+
+                if (existemail)
                 {
                     return new Message<string>
                     {
                         Status = "E",
-                        Result = "You have already used this email to create account use another",
-                        Text = "cannot create"
+                        Text = $"{User.Email} already exist"
                     };
                 }
+
                 var user = new User
                 {
-                    Name = createUser.Name,
-                    Email = createUser.Email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(createUser.PasswordHash),
-                    usertype = createUser.usertype,
-                    Address = createUser.Address,
-                    Contact_no = createUser.Contact_no,
-                    CreatedTime = DateTime.Now,
+                    Email = User.Email,
+                    Name = User.Name,
+                    Contact_no = User.Contact_no,
+                    CreatedTime = DateTime.UtcNow,
+                    Address = User.Address,
+                    usertype = User.usertype,
+
+                    
+
+
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(User.PasswordHash)
+
 
                 };
+
                 _context.Users.Add(user);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return new Message<string>
                 {
                     Status = "S",
-
-                    Text = "created succesfully"
+                    Text = "User created successfully",
                 };
 
 
@@ -56,12 +73,9 @@ namespace Deco_Sara.Services
                 return new Message<string>
                 {
                     Status = "E",
-                    Result = ex.Message,
-                    Text = "cannot create"
+                    Text = ex.Message,
                 };
             }
-
-
 
         }
 
