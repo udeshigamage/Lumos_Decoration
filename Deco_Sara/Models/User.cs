@@ -19,7 +19,7 @@ namespace Deco_Sara.Models
         public string Address { get; set; }
        
         public string PasswordHash { get; set; }
-        public usertype usertype { get; set; }
+        public usertype Role { get; set; }
 
         public DateTime CreatedTime { get; set; }
 
@@ -28,8 +28,8 @@ namespace Deco_Sara.Models
 
     public enum usertype
     {
-        Admin=0,
-        Customer=1,
-        Employee=2
+        Admin,
+        Customer,
+        Employee
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Deco_Sara.DTO;
 using Deco_Sara.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace Deco_Sara.Controllers
         {
             _userservice = userservice;
         }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10,string searchterm="")
         {

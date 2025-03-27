@@ -12,7 +12,7 @@ namespace Deco_Sara.DTO
         public string Name { get; set; }
        
         public string PasswordHash { get; set; }
-        public usertype usertype { get; set; }
+        public usertype Role { get; set; }
 
         public string Address { get; set; }
         public string Email { get; set; }
@@ -34,7 +34,7 @@ namespace Deco_Sara.DTO
 
         public string Address { get; set; }
 
-        public usertype usertype { get; set; }
+        public usertype Role { get; set; }
         public string Email { get; set; }
 
         public string Contact_no { get; set; }

@@ -48,7 +48,7 @@ namespace Deco_Sara.Services
                     Contact_no = User.Contact_no,
                     CreatedTime = DateTime.UtcNow,
                     Address = User.Address,
-                    usertype = User.usertype,
+                    Role = User.Role,
 
                     
 
@@ -97,7 +97,7 @@ namespace Deco_Sara.Services
                 existinguser.Name = updateUser.Name;
                 existinguser.Email = updateUser.Email;
                 existinguser.PasswordHash = updateUser.PasswordHash;
-                existinguser.usertype = updateUser.usertype;
+                existinguser.Role = updateUser.Role;
                 existinguser.Address = updateUser.Address;
                 existinguser.Contact_no = updateUser.Contact_no;
                 existinguser.LastUpdatedTime = DateTime.Now;
@@ -177,7 +177,7 @@ namespace Deco_Sara.Services
                     Email = c.Email,
                     Address = c.Address,
                     Contact_no = c.Contact_no,
-                    usertype = c.usertype,
+                    Role = c.Role,
                     CreatedTime = c.CreatedTime,
                     LastUpdatedTime = c.LastUpdatedTime,
                     User_ID = c.User_ID
@@ -206,7 +206,7 @@ namespace Deco_Sara.Services
                     Email = c.Email,
                     Address = c.Address,
                     Contact_no = c.Contact_no,
-                    usertype = c.usertype,
+                    Role = c.Role,
                     CreatedTime = c.CreatedTime,
                     LastUpdatedTime = c.LastUpdatedTime,
                     User_ID = c.User_ID

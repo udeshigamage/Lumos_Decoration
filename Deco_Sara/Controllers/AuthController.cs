@@ -2,9 +2,12 @@
 using Deco_Sara.DTO;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Deco_Sara.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly Appdbcontext _context;
@@ -28,7 +31,25 @@ namespace Deco_Sara.Controllers
             }
             
             var token = _authService.Generatetoken(user);
-            return Ok(token);
+            var users = _context.Users.Where(c => c.Email == login.Email).Select(c => new ViewUserDTO
+            {
+                Email = c.Email,
+                Name = c.Name,
+                Contact_no = c.Contact_no,
+                Address = c.Address,
+                Role = c.Role,
+                User_ID =c.User_ID,
+
+            }).ToListAsync();
+
+            var response = new
+            {
+                data = users,
+                token = token
+
+            };
+            
+            return Ok(response);
         }
     }
 }
