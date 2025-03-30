@@ -2,12 +2,13 @@
 using Deco_Sara.Models;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Authorization;
+using Deco_Sara.DTO;
 
 namespace Deco_Sara.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+   
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryservice _categoryservice;
@@ -20,9 +21,9 @@ namespace Deco_Sara.Controllers
         
         [HttpGet]
         
-        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10)
+        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10,string searchterm ="")
         {
-            var (categorys, totalcount) = await _categoryservice.GetAllAsync(page, pagesize);
+            var (categorys, totalcount) = await _categoryservice.GetAllAsync(page, pagesize,searchterm);
             var response = new
             {
                 data = categorys,
@@ -37,35 +38,26 @@ namespace Deco_Sara.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var categorys = await _categoryservice.GetByIdAsync(id);
-            if (categorys == null) return NotFound();
-            return Ok(categorys);
+            var Message = await _categoryservice.GetByIdAsync(id);
+            
+            return Ok(Message);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Category category)
+        public async Task<IActionResult> Add(CreateCategoryDTO category)
         {
-            var newcategory = await _categoryservice.AddAsync(category);
-            return CreatedAtAction(nameof(GetById), new { id = newcategory.Category_Id }, newcategory);
+            var message = await _categoryservice.AddAsync(category);
+            return Ok(message);
+            
         }
         [HttpGet("categorylist")]
 
-        public async Task<IActionResult> GetSubcategoryList()
+        public async Task<IActionResult> GetSubcategoryList(int id)
         {
-            var categorys = await _categoryservice.Getcatlist();
+            var subcategorys = await _categoryservice.Listallsubcategories_catgeory(id);
             var response = new
             {
-                data = categorys.Select(v => new
-                {
-                    v.Category_name,
-                    v.Category_Id
-
-
-
-
-
-
-                }),
+                subcategorys
 
             };
 
@@ -80,20 +72,7 @@ namespace Deco_Sara.Controllers
             var categorys = await _categoryservice.Getcatlist();
             var response = new
             {
-                data = categorys.Select(v => new
-                {
-                    v.Category_name,
-                    v.Category_Id,
-                    v.Category_description,
-                    v.Category_image,
-                    
-
-
-
-
-
-
-                }),
+                data = categorys
 
             };
 
@@ -101,16 +80,13 @@ namespace Deco_Sara.Controllers
             return Ok(response);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Updatecategory(int id, Category category)
+        public async Task<IActionResult> Updatecategory(int id, UpdateCategoryDTO category)
         {
-            var updatedcategory = await _categoryservice.UpdateAsync(id, category);
+            var message = await _categoryservice.UpdateAsync(id, category);
 
-            if (updatedcategory == null)
-            {
-                return NotFound();
-            }
+            
 
-            return Ok(updatedcategory);
+            return Ok(message);
         }
 
 
@@ -119,9 +95,9 @@ namespace Deco_Sara.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _categoryservice.DeleteAsync(id);
-            if (!result) return NotFound();
-            return NoContent();
+            var message = await _categoryservice.DeleteAsync(id);
+
+            return Ok(message);
         }
     }
 }

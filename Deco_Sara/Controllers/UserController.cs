@@ -16,7 +16,7 @@ namespace Deco_Sara.Controllers
         {
             _userservice = userservice;
         }
-        [Authorize(Policy = "AdminOnly")]
+       
         [HttpGet]
         public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10,string searchterm="")
         {

@@ -15,7 +15,7 @@ namespace Deco_Sara.DTO
 
     public class UpdateCategoryDTO:CreateCategoryDTO
     {
-        public int Category_Id { get; set; }
+       
 
 
         
@@ -32,5 +32,12 @@ namespace Deco_Sara.DTO
         public string? Category_image { get; set; }
 
         public string? Category_category { get; set; }
+    }
+
+    public class ListcategoryDTO
+    {
+        public int Category_Id { get; set; }
+        public string Category_name { get; set; }
+
     }
 }

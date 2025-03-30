@@ -1,17 +1,20 @@
-﻿using Deco_Sara.Models;
+﻿using Deco_Sara.DTO;
+using Deco_Sara.Models;
 
 namespace Deco_Sara.Services
 {
     public interface ICategoryservice
     {
-        Task<(IEnumerable<Category> categorys, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10);
-        Task<Category> GetByIdAsync(int id);
-        Task<List<Category>> Getcatlist();
-        Task<Category> AddAsync(Category category);
+        Task<(IEnumerable<ViewCategoryDTO> categorys, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10,string searchterm="");
+        Task<List<ViewCategoryDTO>> GetByIdAsync(int id);
+        Task<List<ListcategoryDTO>> Getcatlist();
+        Task<Message<string>> AddAsync(CreateCategoryDTO category);
 
-        Task<Category?> UpdateAsync(int id, Category category);
+        Task<Message<string>> UpdateAsync(int id, UpdateCategoryDTO category);
 
-        Task<bool> DeleteAsync(int id);
+        Task<Message<string>> DeleteAsync(int id);
+
+        Task<List<listSubcategoryDTO>> Listallsubcategories_catgeory(int id);
 
         
     }

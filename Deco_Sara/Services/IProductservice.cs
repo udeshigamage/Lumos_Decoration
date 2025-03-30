@@ -1,18 +1,24 @@
-﻿using Deco_Sara.Models;
+﻿using Deco_Sara.DTO;
+using Deco_Sara.Models;
 
 namespace Deco_Sara.Services
 {
     public interface IProductservice
     {
-        Task<(IEnumerable<Product> products, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10);
-        Task<Product> GetByIdAsync(int id);
-        Task<List<Product>> Getcatlist(int subcatid);
-        Task<Product> AddAsync(Product product);
 
-        Task<Product?> UpdateAsync(int id, Product updatedproduct);
+        Task<(IEnumerable<ViewProductDTO> categorys, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10, string searchterm = "");
+        Task<List<ViewProductDTO>> GetByIdAsync(int id);
+        Task<List<productlistDTO>> Getproductlist();
+        Task<Message<string>> AddAsync(CreateProductDTO product);
 
-        Task<bool> DeleteAsync(int id);
+        Task<Message<string>> UpdateAsync(int id, UpdateProductDTO product);
 
-       
+        Task<Message<string>> DeleteAsync(int id);
+
+        //Task<List<listSubcategoryDTO>> Listallsubcategories_catgeory(int id);
+
+
+
+
     }
 }

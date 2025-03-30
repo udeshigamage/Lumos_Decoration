@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Deco_Sara.Models
 {
+    [Table("Tb_category")]
     public class Category
     {
         [Key]
@@ -14,7 +15,11 @@ namespace Deco_Sara.Models
 
         public string? Category_image { get; set; }
 
-        public ICollection<Subcategory> subcategories { get; set; }
+        public DateTime Created_time { get; set; }
+
+        public DateTime Modified_time { get; set; }
+
+        public virtual ICollection<Subcategory> subcategories { get; set; }
     }
 
    

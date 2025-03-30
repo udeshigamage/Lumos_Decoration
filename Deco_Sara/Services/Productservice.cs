@@ -1,4 +1,5 @@
 ﻿using Deco_Sara.dbcontext__;
+using Deco_Sara.DTO;
 using Deco_Sara.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,87 +14,208 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<(IEnumerable<Product> products, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10)
-        {
-            var query = _context.Products
-                                 .Include(v => v.Category).Include(v=>v.Subcategory);
-            var TotalCount = await query.CountAsync();
-            var categorys = await query.Skip((page - 1) * pagesize).Take(pagesize).ToListAsync();
-            return (categorys, TotalCount);
-        }
-
-        public async Task<List<Product>> Getcatlist(int subcatid)
-        {
-            return await _context.Products
-                                 .Include(p => p.Category)
-                                 .Include(p => p.Subcategory)
-                                 .Where(p => p.Subcategory_Id == subcatid) 
-                                 .ToListAsync();
-        }
-
-
-        public async Task<Product?> GetByIdAsync(int id)
-        {
-            return await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Subcategory)
-                .FirstOrDefaultAsync(p => p.Product_Id == id);
-        }
-
-
-        public async Task<Product> AddAsync(Product product)
-        {
-
-            product.Category = null;
-            product.Subcategory = null;
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return product;
-        }
-
-        public async Task<Product?> UpdateAsync(int id, Product updatedproduct)
-        {
-            var existingProduct = await _context.Products.FindAsync(id);
-            if (existingProduct == null) return null;
-
-            existingProduct.Product_name = updatedproduct.Product_name;
-            existingProduct.Product_price = updatedproduct.Product_price;
-            existingProduct.Product_image = updatedproduct.Product_image;
-            existingProduct.Product_discount = updatedproduct.Product_discount;
-
-            // Fetch and assign Category & Subcategory
-            existingProduct.Category = await _context.Categories.FindAsync(updatedproduct.Category_Id);
-            existingProduct.Subcategory = await _context.Subcategories.FindAsync(updatedproduct.Subcategory_Id);
-
-            existingProduct.Category_Id = updatedproduct.Category_Id;
-            existingProduct.Subcategory_Id = updatedproduct.Subcategory_Id;
-
-            await _context.SaveChangesAsync();
-            return existingProduct;
-        }
-
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var category = await _context.Products.FindAsync(id);
-            if (category == null) return false;
-
-            _context.Products.Remove(category);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        public async Task<IEnumerable<Product>> GetAllSearchAsync(string search)
-        {
-            var query = _context.Products.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(search))
+        public async Task<(IEnumerable<ViewProductDTO> categorys, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10, string searchterm = "") {
+            try
             {
-                query = query.Where(e =>
-                    e.Product_name.Contains(search));
+                var query = _context.Products.AsQueryable();
+                if (!string.IsNullOrWhiteSpace(searchterm))
+                {
+                    query = query.Where(c => c.Product_name.Contains(searchterm) );
+                }
+                var totalcount = await query.CountAsync();
+                var productset = await query.Skip((page - 1) * pagesize).Take(pagesize).Select(c => new ViewProductDTO
+                {
+                   Product_discount = c.Product_discount,
+                   Product_Id = c.Product_Id,
+                   Product_image = c.Product_image,
+                   Product_name = c.Product_name,
+                   Product_price = c.Product_price
+                   
+                  
+
+,
+                }).ToListAsync();
+
+                return (productset, totalcount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
+        public async Task<List<ViewProductDTO>> GetByIdAsync(int id) {
+            try
+            {
+                var product = await _context.Products.Where(c => c.Product_Id == id).Select(c => new ViewProductDTO
+                {
+                   Product_Id = c.Product_Id,
+                   Product_name = c.Product_name,
+                   Product_price = c.Product_price,
+                   Product_discount = c.Product_discount,
+                  
+                   Product_image = c.Product_image,
+                  
+
+
+                }).ToListAsync();
+                if (product == null)
+                {
+                    throw new Exception("product id not exist");
+                }
+                return (product);
+            }
+            catch
+            {
+                throw new Exception("error fetching product");
+            }
+        }
+        public async Task<List<productlistDTO>> Getproductlist() {
+            try
+            {
+                var producrlist = await _context.Products.Select(c => new productlistDTO
+                {
+                    Product_Id = c.Product_Id,
+                    Product_name = c.Product_name,
+                  
+                }).ToListAsync();
+               
+
+                return (producrlist);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error");
+
+            }
+        }
+        public async Task<Message<string>> AddAsync(CreateProductDTO product) {
+            try
+            {
+
+                bool isexist = await _context.Products.AnyAsync(c => c.Product_name == product.Product_name);
+                if (isexist)
+                {
+                    return new Message<string>
+                    {
+                        Status = "E",
+                        Result = "product exist"
+                    };
+                }
+                var product_ = new Product
+                {
+                   Product_name = product.Product_name,
+                   Product_price = product.Product_price,
+                   Product_image = product.Product_image,
+                   Product_discount = product.Product_discount,
+                   Category_Id = product.Category_Id,
+                   Subcategory_Id = product.Subcategory_Id
+                  
+
+                };
+              
+                await _context.Products.AddAsync(product_);
+                await _context.SaveChangesAsync();
+
+                return new Message<string>
+                {
+                    Status = "S",
+                    Result = "Successfully created"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new Message<string>
+                {
+                    Status = "E",
+                    Result = "Error"
+                };
+
+            }
+        }
+
+     public async   Task<Message<string>> UpdateAsync(int id, UpdateProductDTO product) {
+
+            try
+            {
+                var existingproduct = await _context.Products.FindAsync(id);
+                if (existingproduct == null)
+                {
+                    return new Message<string>
+                    {
+                        Status = "E",
+                        Result = "Error"
+                    };
+
+                }
+              existingproduct.Product_image = product.Product_image;
+                existingproduct.Product_name = product.Product_name;
+                existingproduct.Product_price = product.Product_price;
+                existingproduct.Product_discount = product.Product_discount;
+                existingproduct.Category_Id = product.Category_Id;
+                existingproduct.Subcategory_Id = product.Subcategory_Id;
+                
+
+                await _context.SaveChangesAsync();
+                return new Message<string>
+                {
+                    Status = "S",
+                    Result = "Successfully updated"
+                };
+
+
+            }
+            catch (Exception ex)
+            {
+                return new Message<string>
+                {
+                    Status = "E",
+                    Result = "Error"
+                };
 
             }
 
-            return await query.ToListAsync();
+
+        }
+
+      public async   Task<Message<string>> DeleteAsync(int id)
+        {
+
+            try
+            {
+                var product = _context.Products.Find(id);
+                if (product == null)
+                {
+                    return new Message<string>
+                    {
+                        Status = "E",
+                        Result = "product not found"
+                    };
+
+
+
+
+                }
+                _context.Products.Remove(product);
+                _context.SaveChangesAsync();
+
+                return new Message<string>
+                {
+                    Status = "S",
+                    Result = "Successfully deleted"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new Message<string>
+                {
+                    Status = "E",
+                    Result = "Error"
+                };
+            }
+
         }
     }
 }
