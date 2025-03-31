@@ -50,20 +50,26 @@ namespace Deco_Sara.Controllers
             return Ok(message);
             
         }
-        [HttpGet("categorylist")]
-
+        [HttpGet("categorylist/{id}")]
         public async Task<IActionResult> GetSubcategoryList(int id)
         {
             var subcategorys = await _categoryservice.Listallsubcategories_catgeory(id);
             var response = new
             {
                 subcategorys
-
             };
-
 
             return Ok(response);
         }
+
+        [HttpGet("listallcategories/list")]
+        public async Task<IActionResult> Getcategorylist()
+        {
+            var category = await _categoryservice.Listcatgeoryall();
+            return Ok(category);
+
+        }
+
 
         [HttpGet("category/categorylist")]
 

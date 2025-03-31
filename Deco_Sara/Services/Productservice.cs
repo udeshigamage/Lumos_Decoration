@@ -29,7 +29,9 @@ namespace Deco_Sara.Services
                    Product_Id = c.Product_Id,
                    Product_image = c.Product_image,
                    Product_name = c.Product_name,
-                   Product_price = c.Product_price
+                   Product_price = c.Product_price,
+                   Category_Id =c.Category_Id,
+                   Subcategory_Id =c.Subcategory_Id
                    
                   
 
@@ -52,6 +54,8 @@ namespace Deco_Sara.Services
                    Product_name = c.Product_name,
                    Product_price = c.Product_price,
                    Product_discount = c.Product_discount,
+                   Category_Id = c.Category_Id,
+                   Subcategory_Id =c.Subcategory_Id,
                   
                    Product_image = c.Product_image,
                   
@@ -63,6 +67,32 @@ namespace Deco_Sara.Services
                     throw new Exception("product id not exist");
                 }
                 return (product);
+            }
+            catch
+            {
+                throw new Exception("error fetching product");
+            }
+        }
+
+
+        public async Task<List<ProductlistallDTO>> Listallproducts(int id)
+        {
+            try
+            {
+                var products = await _context.Products.Where(c => c.Subcategory_Id == id).Select(c => new ProductlistallDTO
+                {
+                    Product_Id = c.Product_Id,
+                    Product_name = c.Product_name,
+                    Product_price = c.Product_price,
+                    Product_discount = c.Product_discount,
+                    Category_Id = c.Category_Id,
+                    Subcategory_Id = c.Subcategory_Id,
+                    Product_image = c.Product_image,
+                    
+                }).ToListAsync();
+
+                return products;
+
             }
             catch
             {

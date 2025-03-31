@@ -30,7 +30,8 @@ namespace Deco_Sara.Services
                     Subcategory_name = c.Subcategory_name,
                     Subcategory_Id = c.Subcategory_Id,
                     Subcategory_image = c.Subcategory_image,
-                    Category_Id = c.Category_Id
+                    Category_Id = c.Category_Id,
+                    Category_name =c.Category.Category_name
 
 
 
@@ -38,6 +39,30 @@ namespace Deco_Sara.Services
                 }).ToListAsync();
 
                 return (subcategoryset, totalcount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
+
+        public async Task<List<ViewSubcategoryDTO>> listallsubcategories(int id)
+        {
+            try
+            {
+                var subcategories = await _context.Subcategories.Where(c => c.Category_Id == id).Select(c => new ViewSubcategoryDTO
+                {
+                    Subcategory_description= c.Subcategory_description,
+                    Subcategory_Id =c.Subcategory_Id,
+                    Subcategory_image= c.Subcategory_image,
+                    Subcategory_name=c.Subcategory_name,
+                    Category_Id=c.Category_Id,
+
+                    
+
+                }).ToListAsync();
+                return subcategories;
+
             }
             catch (Exception ex)
             {

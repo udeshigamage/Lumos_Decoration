@@ -36,7 +36,12 @@ namespace Deco_Sara.dbcontext__
         public DbSet<Order> Order { get; set; }
         public DbSet<Orderitem> OrderItems { get; set; }
 
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasConversion<int>();
+        }
 
 
 

@@ -15,6 +15,6 @@ namespace Deco_Sara.DTO
 
         public virtual OrderDTO Order { get; set; }
 
-        public virtual ProductDTO Product { get; set; }
+        public virtual productlistDTO Product { get; set; }
     }
 }

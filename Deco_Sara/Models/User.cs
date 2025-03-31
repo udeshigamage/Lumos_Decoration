@@ -21,9 +21,20 @@ namespace Deco_Sara.Models
         public string PasswordHash { get; set; }
         public usertype Role { get; set; }
 
+        public string RoleName { get; set; }
+
+        public string? userimage { get; set; }
+
+        public string? NIC { get; set; }
+
+
+        public string? Servicerole { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public DateTime LastUpdatedTime { get; set; }
+
+        public bool isactive { get; set; } 
     }
 
     public enum usertype

@@ -42,6 +42,8 @@ namespace Deco_Sara.DTO
 
         public int Category_Id { get; set; }
 
+        public string Category_name { get; set; }
+
     }
 
    

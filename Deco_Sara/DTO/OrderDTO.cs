@@ -23,7 +23,26 @@ namespace Deco_Sara.DTO
 
         public decimal TotalCost { get; set; }
     }
-  public class Orderrequest
+
+    public class OrderCreateDTO
+    {
+        
+        public string Order_description { get; set; }
+
+        public DateTime Order_deadlinedate { get; set; }
+
+
+        public decimal Order_allowance { get; set; }
+
+        public bool Order_payment_status { get; set; }
+
+        public bool Order_allowance_status { get; set; }
+
+        public string Order_status { get; set; }
+
+        public decimal TotalCost { get; set; }
+    }
+    public class Orderrequest
     {
         public int Customer_ID { get; set; }
         public List<OrderitemDTO> orderitems { get; set; } = new List<OrderitemDTO>();

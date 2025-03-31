@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Deco_Sara.dbcontext__;
+using Deco_Sara.DTO;
 
 namespace Deco_Sara.Services
 {
@@ -14,11 +15,44 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<(IEnumerable<Customer>customers,int TotalCount)> GetAllAsync(int page=1,int pagesize=10)
+        public async Task<(IEnumerable<ViewUserDTO>customers,int TotalCount)> GetAllAsync(int page=1,int pagesize=10,string searchterm="")
         {
-            var TotalCount = await _context.Customer.CountAsync();
-            var customers = await _context.Customer.Skip((page-1)*pagesize).Take(pagesize).ToListAsync();
-            return (customers, TotalCount);
+            try
+            {
+               
+                
+               
+                var query = _context.Users
+     .Where(c => c.RoleName == "Customer")
+     .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(searchterm))
+                {
+                    query = query.Where(c => c.Name.Contains(searchterm) );
+                }
+                var totalcount = await query.CountAsync();
+                var viewCustomers_ = await query.Skip((page - 1) * pagesize).Take(pagesize).Select(c => new ViewUserDTO
+                {
+                  Name= c.Name,
+                  RoleName= c.RoleName,
+                  Role= c.Role,
+                  Address= c.Address,
+                  Email=c.Email,
+                  Servicerole=c.Servicerole,
+                  NIC=c.NIC,
+                  Contact_no=c.Contact_no,
+                  User_ID =c.User_ID
+                  
+
+,
+                }).ToListAsync();
+
+                return (viewCustomers_, totalcount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
         }
 
         public async Task<Customer> GetByIdAsync(int id)

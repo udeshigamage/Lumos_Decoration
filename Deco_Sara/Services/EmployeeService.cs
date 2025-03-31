@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Deco_Sara.dbcontext__;
+using Deco_Sara.DTO;
+using System.Drawing.Printing;
 
 namespace Deco_Sara.Services
 {
@@ -14,80 +16,147 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
-        public async Task<(IEnumerable<Employee> Employees, int TotalCount)> GetAllAsync(int page = 1, int pageSize = 10)
+        public async Task<(IEnumerable<ViewUserDTO> Employees, int TotalCount)> GetAllAsync(int page = 1, int pagesize = 10, string searchterm = "")
         {
-            var query = _context.Employee.Include(e => e.role);
-            var totalCount = await query.CountAsync();
+            try
+            {
 
-            var employees = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
 
-            return (employees, totalCount);
+
+                var query = _context.Users
+     .Where(c => c.RoleName == "Employee")
+     .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(searchterm))
+                {
+                    query = query.Where(c => c.Name.Contains(searchterm)|| c.Address.Contains(searchterm) || c.Servicerole.Contains(searchterm));
+                }
+                var totalcount = await query.CountAsync();
+                var viewCustomers_ = await query.Skip((page - 1) * pagesize).Take(pagesize).Select(c => new ViewUserDTO
+                {
+                    Name = c.Name,
+                    RoleName = c.RoleName,
+                    Address = c.Address,
+                    NIC = c.NIC,
+                    Contact_no = c.Contact_no,
+                    Role = c.Role,
+                    Servicerole = c.Servicerole,
+                    User_ID = c.User_ID,
+                    userimage = c.userimage,
+                    Email = c.Email,
+                    isactive = c.isactive
+                   
+
+
+
+
+
+,
+                }).ToListAsync();
+
+                return (viewCustomers_, totalcount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
         }
 
 
-        public async Task<Employee> GetByIdAsync(int id)
-        {
-            return await _context.Employee.FindAsync(id);
-        }
 
-        public async Task<Employee> AddAsync(Employee employees)
-        {
-            employees.role = null;
-            _context.Employee.Add(employees);
-            await _context.SaveChangesAsync();
-            return employees;
-        }
-        public async Task<Employee?> UpdateAsync(int id, Employee updatedEmployee)
+
+        public async Task<Message<string>> UpdateAsync(int id, UpdateUserDTO updatedEmployee)
         {
             // Find the employee in the database
-            var existingEmployee = await _context.Employee.FindAsync(id);
+            var existingEmployee = await _context.Users
+                .FirstOrDefaultAsync(c => c.RoleName == "Employee" && c.User_ID == id);
+
             if (existingEmployee == null)
             {
-                return null; // Return null if the employee doesn't exist
+                return new Message<string>
+                {
+                    Result = "error",
+                    Status = "error",
+                    Text = "Employee not found"
+                };
             }
 
             // Update the employee fields
-            existingEmployee.email = updatedEmployee.email;
-            existingEmployee.emp_address = updatedEmployee.emp_address;
-            existingEmployee.emp_Name = updatedEmployee.emp_Name;
-           existingEmployee.emp_image = updatedEmployee.emp_image;
-            existingEmployee.Role_ID = updatedEmployee.Role_ID;
-            existingEmployee.emp_contact_no = updatedEmployee.emp_contact_no;
-            existingEmployee.emp_allowance = updatedEmployee.emp_allowance;
+            existingEmployee.Name = updatedEmployee.Name;
+            existingEmployee.Email = updatedEmployee.Email;
+            existingEmployee.Address = updatedEmployee.Address;
+            existingEmployee.userimage = updatedEmployee.userimage;
+            existingEmployee.PasswordHash = updatedEmployee.PasswordHash;
+            existingEmployee.NIC = updatedEmployee.NIC;
+            existingEmployee.Servicerole = updatedEmployee.Servicerole;
+
+            existingEmployee.Contact_no = updatedEmployee.Contact_no;
+            existingEmployee.LastUpdatedTime = DateTime.Now;
 
             // Save changes to the database
             await _context.SaveChangesAsync();
 
-            return existingEmployee; // Return the updated employee
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var employees = await _context.Employee.FindAsync(id);
-            if (employees == null) return false;
-
-            _context.Employee.Remove(employees);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        public async Task<IEnumerable<Employee>> GetAllSearchAsync(string search)
-        {
-            var query = _context.Employee.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(search))
+            return new Message<string>
             {
-                query = query.Where(e =>
-                    e.emp_Name.Contains(search) ||
-                    e.emp_contact_no.Contains(search));
-                  
-            }
-
-            return await query.ToListAsync();
+                Result = "success",
+                Status = "success",
+                Text = "Successfully updated"
+            };
         }
 
 
+        public async Task<Message<string>> DeactivateAsync(int id)
+        {
+            var employees = await _context.Users
+                .FirstOrDefaultAsync(c => c.RoleName == "Employee" && c.User_ID == id);
+            if (employees == null) return new Message<string>
+            {
+                Result = "error",
+                Status = "error",
+
+            };
+
+            employees.isactive = false;
+
+
+            await _context.SaveChangesAsync();
+            return new Message<string>
+            {
+                Result = "success",
+                Status = "success",
+
+
+            };
+
+
+
+        }
+
+        public async Task<Message<string>> ActiveAsync(int id)
+        {
+            var employees = await _context.Users
+                .FirstOrDefaultAsync(c => c.RoleName == "Employee" && c.User_ID == id);
+            if (employees == null) return new Message<string>
+            {
+                Result = "error",
+                Status = "error",
+
+            };
+
+            employees.isactive = true;
+
+
+            await _context.SaveChangesAsync();
+            return new Message<string>
+            {
+                Result = "success",
+                Status = "success",
+
+
+            };
+
+
+
+        }
     }
-}
+    }

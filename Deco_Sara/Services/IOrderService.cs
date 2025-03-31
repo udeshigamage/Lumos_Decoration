@@ -22,7 +22,7 @@ namespace Deco_Sara.Services
 
         Task<Order> GetByIdAsync(int id);
 
-        Task<int> AddAsync(int Customer_ID, List<OrderitemDTO> orderitems, OrderDTO order);
+        Task<int> AddAsync(int Customer_ID, List<OrderitemDTO> orderitems, CreateOrderDTO order);
 
         Task<Order?> UpdateAsync(int id,Order order);
 

@@ -3,8 +3,8 @@ namespace Deco_Sara.DTO
 {
     public class CreateCategoryDTO
     {
-       
-       
+
+
 
         public string Category_name { get; set; }
 
@@ -13,12 +13,12 @@ namespace Deco_Sara.DTO
         public string? Category_image { get; set; }
     }
 
-    public class UpdateCategoryDTO:CreateCategoryDTO
+    public class UpdateCategoryDTO : CreateCategoryDTO
     {
-       
 
 
-        
+
+
     }
     public class ViewCategoryDTO
     {
@@ -39,5 +39,15 @@ namespace Deco_Sara.DTO
         public int Category_Id { get; set; }
         public string Category_name { get; set; }
 
+    }
+    public class Listcategoryall
+    {
+        public int Category_Id { get; set; }
+
+        public string Category_name { get; set; }
+
+        public string Category_description { get; set; }
+
+        public string? Category_image { get; set; }
     }
 }

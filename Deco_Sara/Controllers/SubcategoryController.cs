@@ -2,6 +2,7 @@
 using Deco_Sara.Models;
 using Deco_Sara.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Deco_Sara.DTO;
 
 namespace Deco_Sara.Controllers
 {
@@ -17,35 +18,14 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10)
+        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10,string searchterm="")
         {
-            var (Subcategorys, totalcount) = await _SubcategoryService.GetAllAsync(page, pagesize);
+            var (Subcategorys, totalcount) = await _SubcategoryService.GetAllAsync(page, pagesize,searchterm);
 
 
             var response = new
             {
-                data =Subcategorys.Select(v => new
-                {
-                    v.Subcategory_name,
-                    v.Subcategory_Id,
-                    v.Subcategory_image,
-                    v.Subcategory_description,
-                    v.Category_Id,
-                   
-
-                    
-
-                    Category = new
-                    {
-                        v.Category.Category_name,
-                        v.Category.Category_Id,
-                        v.Category.Category_description,
-                        v.Category.Category_image,
-
-                       
-                    },
-                    
-                }),
+                data =Subcategorys,
                 totalItems = totalcount,
                 totalPages = (int)Math.Ceiling((double)totalcount / pagesize),
                 currentPage = page
@@ -62,55 +42,15 @@ namespace Deco_Sara.Controllers
             if (Subcategorys == null) return NotFound();
             return Ok(Subcategorys);
         }
-        [HttpGet("subcategory/category/{categoryId}")]
-        public async Task<IActionResult> GetByCategoryId(int categoryId)
-        {
-            var Subcategorys = await _SubcategoryService.GetSubcategoriesByCategoryIdAsync(categoryId);
+        [HttpGet("listallproducts_subcatgeory/{id}")]
 
+        public async Task<IActionResult> Listallproducts_subcatgeory(int id)
+        {
+            var products = await _SubcategoryService.Listallproducts_subcatgeory(id);
             var response = new
             {
-                data = Subcategorys.Select(v => new
-                {
-                    v.Subcategory_name,
-                    v.Subcategory_Id,
-
-
-
-
-
-
-                }),
-
+                data = products
             };
-
-
-            return Ok(response);
-        }
-
-        [HttpGet("subcategory/category/list/{categoryId}")]
-        public async Task<IActionResult> GetByategoryId(int categoryId)
-        {
-            var Subcategorys = await _SubcategoryService.GetSubcategoriesByCategoryIdAsync(categoryId);
-
-            var response = new
-            {
-                data = Subcategorys.Select(v => new
-                {
-                    v.Subcategory_name,
-                    v.Subcategory_Id,
-                    v.Subcategory_image,
-                    v.Subcategory_description
-
-
-
-
-
-
-                }),
-
-            };
-
-
             return Ok(response);
         }
 
@@ -121,17 +61,7 @@ namespace Deco_Sara.Controllers
             var Subcategorys = await _SubcategoryService.GetSubcatlist();
             var response = new
             {
-                data = Subcategorys.Select(v => new
-                {
-                    v.Subcategory_name,
-                    v.Subcategory_Id,
-                    
-
-
-
-
-                   
-                }),
+                data = Subcategorys
                
             };
 
@@ -140,34 +70,37 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Subcategory Subcategory)
+        public async Task<IActionResult> Add(CreateSubcategoryDTO Subcategory)
         {
-            var newSubcategory = await _SubcategoryService.AddAsync(Subcategory);
-            return CreatedAtAction(nameof(GetById), new { id = newSubcategory.Subcategory_Id }, newSubcategory);
+            var message = await _SubcategoryService.AddAsync(Subcategory);
+            return Ok(message);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Updateproduct(int id, Subcategory Subcategory)
+        public async Task<IActionResult> Updateproduct(int id, UpdatesubcategoryDTO Subcategory)
         {
-            var updatedproduct = await _SubcategoryService.UpdateAsync(id, Subcategory);
+            var Message = await _SubcategoryService.UpdateAsync(id, Subcategory);
 
-            if (updatedproduct == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(updatedproduct);
+           
+            return Ok(Message);
         }
 
 
+        [HttpGet("getallsubategorieslist/categories/{id}")]
 
+        public async Task<IActionResult> getallsubcategorieslist(int id)
+        {
+            var subcategories = await _SubcategoryService.listallsubcategories(id);
+
+            return Ok(subcategories);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _SubcategoryService.DeleteAsync(id);
-            if (!result) return NotFound();
-            return NoContent();
+            var Message = await _SubcategoryService.DeleteAsync(id);
+           
+            return Ok( Message);
         }
     }
 }

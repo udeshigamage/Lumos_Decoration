@@ -25,9 +25,9 @@ namespace Deco_Sara.Models
         [ForeignKey("Category")]
         public int Category_Id { get; set; }
         [ValidateNever]
-        public Subcategory Subcategory { get; set; }
+        public virtual  Subcategory Subcategory { get; set; }
         [ValidateNever]
-        public Category Category { get; set; }
+        public virtual  Category Category { get; set; }
 
        public ICollection<Orderitem> Orderitems { get; set; } = new List<Orderitem>();
 

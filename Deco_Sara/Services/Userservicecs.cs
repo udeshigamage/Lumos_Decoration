@@ -49,6 +49,13 @@ namespace Deco_Sara.Services
                     CreatedTime = DateTime.UtcNow,
                     Address = User.Address,
                     Role = User.Role,
+                    Servicerole= User.Servicerole,
+                    RoleName= User.RoleName,
+                    NIC = User.NIC,
+                    userimage =User.userimage,
+                    isactive = true,
+                    
+                    
 
                     
 
@@ -98,8 +105,11 @@ namespace Deco_Sara.Services
                 existinguser.Email = updateUser.Email;
                 existinguser.PasswordHash = updateUser.PasswordHash;
                 existinguser.Role = updateUser.Role;
+                existinguser.isactive = updateUser.isactive;
                 existinguser.Address = updateUser.Address;
                 existinguser.Contact_no = updateUser.Contact_no;
+                existinguser.userimage = updateUser.userimage;
+                existinguser.RoleName = updateUser.RoleName;
                 existinguser.LastUpdatedTime = DateTime.Now;
                 _context.SaveChangesAsync();
 
@@ -180,7 +190,13 @@ namespace Deco_Sara.Services
                     Role = c.Role,
                     CreatedTime = c.CreatedTime,
                     LastUpdatedTime = c.LastUpdatedTime,
-                    User_ID = c.User_ID
+                    User_ID = c.User_ID,
+                    RoleName = c.RoleName,
+                    Servicerole=c.Servicerole,
+                    userimage=c.userimage,
+                    NIC = c.NIC,
+                    isactive=c.isactive,
+                    
 
 
                 }).ToListAsync();
@@ -209,7 +225,9 @@ namespace Deco_Sara.Services
                     Role = c.Role,
                     CreatedTime = c.CreatedTime,
                     LastUpdatedTime = c.LastUpdatedTime,
-                    User_ID = c.User_ID
+                    User_ID = c.User_ID,
+                    RoleName = c.RoleName,
+                    isactive=c.isactive
 
                 }).FirstOrDefault();
                 return users;

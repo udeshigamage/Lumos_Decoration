@@ -39,10 +39,11 @@ namespace Deco_Sara.Controllers
                     
                     Customer = new
                     {
-                        v.Customer.Customer_ID,
-                        v.Customer.Customer_name,
-                        v.Customer.Customer_email,
-                        v.Customer.Customer_address
+                       v.user.Address,
+                       v.user.Name,
+                       v.user.Email,
+                       v.user.LastUpdatedTime,
+                       v.User_ID
                         , // Add any other customer properties you need
                     },
                     OrderItems = v.Orderitems.Select(oi => new
@@ -77,7 +78,7 @@ namespace Deco_Sara.Controllers
             if (request == null || request.orderitems?.Count == 0 || request.order == null)
                 return BadRequest("Invalid order data");
 
-            var orderId = await _orderService.AddAsync(request.Customer_ID, request.orderitems, request.order);
+            var orderId = await _orderService.AddAsync(request.User_ID, request.orderitems, request.order);
             return Ok(new { OrderId = orderId, Message = "Order created successfully" });
         }
 

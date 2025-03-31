@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Deco_Sara.Models;
 using Deco_Sara.Services;
+using Deco_Sara.DTO;
 
 namespace Deco_Sara.Controllers
 {
@@ -16,49 +17,28 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10)
+        public async Task<IActionResult> GetAll(int page = 1, int pagesize = 10,string searchterm="")
         {
-            var (products, totalcount) = await _productService.GetAllAsync(page, pagesize);
+            var (products, totalcount) = await _productService.GetAllAsync(page, pagesize,searchterm);
             var response = new
             {
-                data = products.Select(v => new
-                {
-                    v.Product_Id,
-                    v.Product_name,
-                    v.Product_price,
-                    v.Product_discount,
-                    v.Product_image,
-
-                    Category = new
-                    {
-                        v.Category.Category_Id,
-                       
-                        v.Category.Category_description,
-                        v.Category.Category_image,
-                        
-
-                    },
-
-                    Subcategory = new
-                    {
-                        v.Subcategory.Subcategory_Id,
-                        v.Subcategory.Subcategory_name,
-                        v.Subcategory.Subcategory_description,
-                        v.Subcategory.Subcategory_image,
-                        v.Subcategory.Category_Id,
-                    },
-
-
-                   
-                    
-
-                }),
+                data = products,
                 totalItems = totalcount,
                 totalPages = (int)Math.Ceiling((double)totalcount / pagesize),
                 currentPage = page
             };
 
             return Ok(response);
+        }
+        [HttpGet("productalllist/list/{subcategory_id}")]
+
+        public async Task<IActionResult> getallsubcaegories(int subcategory_id)
+
+        {
+            var products = await _productService.Listallproducts(subcategory_id);
+            return Ok(products);
+
+
         }
 
         [HttpGet("{id}")]
@@ -70,52 +50,30 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Product product)
+        public async Task<IActionResult> Add(CreateProductDTO product)
         {
-            var newproduct = await _productService.AddAsync(product);
-            return CreatedAtAction(nameof(GetById), new { id = newproduct.Product_Id }, newproduct);
+            var message = await _productService.AddAsync(product);
+            return Ok(message);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Updateproduct(int id, Product product)
+        public async Task<IActionResult> Updateproduct(int id,UpdateProductDTO product)
         {
-            var updatedproduct = await _productService.UpdateAsync(id, product);
+            var message = await _productService.UpdateAsync(id, product);
 
-            if (updatedproduct == null)
-            {
-                return NotFound();
-            }
+            
 
-            return Ok(updatedproduct);
+            return Ok(message);
         }
 
-        [HttpGet("subcategory/product/{subcategoryId}")]
-        public async Task<IActionResult> GetByCategoryId(int subcategoryId)
+        [HttpGet("productlist")]
+        public async Task<IActionResult> GetproductList()
         {
-            var products = await _productService.Getcatlist(subcategoryId);
-
+            var products = await _productService.Getproductlist();
             var response = new
             {
-                data = products.Select(v => new
-                {
-                    v.Product_name,
-                    v.Product_Id,
-                    v.Product_image,
-                    v.Product_price,
-                    v.Product_discount,
-                    v.Subcategory_Id,
-                    v.Category_Id,
-
-
-
-
-
-
-                }),
-
+                products
             };
-
-
             return Ok(response);
         }
 
@@ -125,9 +83,9 @@ namespace Deco_Sara.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _productService.DeleteAsync(id);
-            if (!result) return NotFound();
-            return NoContent();
+            var message = await _productService.DeleteAsync(id);
+
+            return Ok(message);
         }
     }
 }

@@ -16,6 +16,9 @@ namespace Deco_Sara.Services
 
         Task<List<listSubcategoryDTO>> Listallsubcategories_catgeory(int id);
 
+        Task<List<Listcategoryall>> Listcatgeoryall();
+
+
         
     }
 }

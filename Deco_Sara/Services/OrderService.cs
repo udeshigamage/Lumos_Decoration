@@ -18,7 +18,7 @@ namespace Deco_Sara.Services
 
         public async Task<(IEnumerable<Order> Order, int TotalCount)> GetAllOrdersAsync(int page = 1, int pageSize = 10)
         {
-            var query =  _context.Order.Include(order => order.Orderitems).ThenInclude(Orderitem => Orderitem.Product).Include(order => order.Customer);
+            var query =  _context.Order.Include(order => order.Orderitems).ThenInclude(Orderitem => Orderitem.Product).Include(order => order.user);
             var totalCount = await query.CountAsync();
 
             var Order = await query
@@ -37,20 +37,20 @@ namespace Deco_Sara.Services
         public async Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId)
+                .Where(order => order.User_ID == customerId)
                 .ToListAsync();
         }
 
         public async Task<int> GetPendingOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "pending")
+                .Where(order => order.User_ID == customerId && order.Order_status == "pending")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "To Accept")
+                .Where(order => order.User_ID == customerId && order.Order_status == "To Accept")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync()
@@ -74,7 +74,7 @@ namespace Deco_Sara.Services
         public async Task<int> GetCompletedOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "Completed")
+                .Where(order => order.User_ID == customerId && order.Order_status == "Completed")
                 .CountAsync();
         }
 
@@ -82,7 +82,7 @@ namespace Deco_Sara.Services
         {
             return await _context.Order.FindAsync(id);
         }
-        public async Task<int> AddAsync(int Customer_ID, List<OrderitemDTO> orderitems, OrderDTO order)
+        public async Task<int> AddAsync(int Customer_ID, List<OrderitemDTO> orderitems, CreateOrderDTO order)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -90,7 +90,7 @@ namespace Deco_Sara.Services
                
                 var orders = new Order
                 {
-                    Customer_ID = Customer_ID,
+                    User_ID = order.User_ID,
                     Order_date = DateTime.Now,
                     Order_allowance = order.Order_allowance,
                     Order_status = order.Order_status,

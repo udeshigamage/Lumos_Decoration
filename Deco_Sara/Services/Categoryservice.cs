@@ -132,7 +132,27 @@ namespace Deco_Sara.Services
 
             }
         }
+        public async Task<List<Listcategoryall>> Listcatgeoryall()
+        {
+            try
+            {
+                var listcategories = await _context.Categories.Select(c => new Listcategoryall
+                {
+                    Category_name = c.Category_name,
+                    Category_description= c.Category_description,
+                    Category_image= c.Category_image,
+                    Category_Id = c.Category_Id,
+                    
 
+                }).ToListAsync();
+                return listcategories;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error");
+            }
+        }
         public async Task<Message<string>> UpdateAsync(int id, UpdateCategoryDTO category) {
             try
             {

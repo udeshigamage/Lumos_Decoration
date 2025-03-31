@@ -16,9 +16,9 @@ namespace Deco_Sara.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int page=1,int pagesize=10)
+        public async Task<IActionResult> GetAll(int page=1,int pagesize=10,string searchterm="")
         {
-            var (customers,totalcount) = await _customerService.GetAllAsync(page,pagesize);
+            var (customers,totalcount) = await _customerService.GetAllAsync(page,pagesize,searchterm);
             var response = new
             {
                 data = customers,

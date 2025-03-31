@@ -3,6 +3,7 @@ using System;
 using Deco_Sara.dbcontext__;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    partial class AppdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250331111312_erty")]
+    partial class erty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,16 +140,12 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nic")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<int>("Role_ID")
                         .HasColumnType("int");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("emp_Name")
                         .IsRequired()
@@ -164,6 +163,10 @@ namespace Deco_Sara.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("emp_image")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nic")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Emp_ID");
@@ -235,7 +238,7 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("Customer_ID")
+                    b.Property<int>("Customer_ID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Order_allowance")
@@ -264,14 +267,9 @@ namespace Deco_Sara.Migrations
                     b.Property<decimal>("TotalCost")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("User_ID")
-                        .HasColumnType("int");
-
                     b.HasKey("Order_ID");
 
                     b.HasIndex("Customer_ID");
-
-                    b.HasIndex("User_ID");
 
                     b.ToTable("Order");
                 });
@@ -445,9 +443,6 @@ namespace Deco_Sara.Migrations
                     b.Property<string>("Servicerole")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("isactive")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("userimage")
                         .HasColumnType("longtext");
 
@@ -480,17 +475,13 @@ namespace Deco_Sara.Migrations
 
             modelBuilder.Entity("Deco_Sara.Models.Order", b =>
                 {
-                    b.HasOne("Deco_Sara.Models.Customer", null)
+                    b.HasOne("Deco_Sara.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("Customer_ID");
-
-                    b.HasOne("Deco_Sara.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("User_ID")
+                        .HasForeignKey("Customer_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Orderitem", b =>

@@ -15,7 +15,7 @@ namespace Deco_Sara.Services
 
         Task<Message<string>> DeleteAsync(int id);
 
-        //Task<List<listSubcategoryDTO>> Listallsubcategories_catgeory(int id);
+        Task<List<ProductlistallDTO>> Listallproducts(int id);
 
 
 

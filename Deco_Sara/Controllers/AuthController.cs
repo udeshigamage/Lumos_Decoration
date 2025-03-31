@@ -24,6 +24,13 @@ namespace Deco_Sara.Controllers
         [HttpPost("login")]
         public async Task <IActionResult> Loginasync([FromBody] LoginDTO login)
         {
+            var user_ = await _context.Users.FirstOrDefaultAsync(c => c.Email == login.Email); // Replace 'userEmail' with actual email
+
+            if (user_ != null && !user_.isactive  )
+            {
+                return Unauthorized(new { message = "We have deactivated your email" });
+            }
+
             var user = _context.Users.SingleOrDefault(c => c.Email == login.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(login.PasswordHash, user.PasswordHash))
             {

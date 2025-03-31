@@ -25,10 +25,10 @@ namespace Deco_Sara.Models
         public bool Order_allowance_status { get; set; }
 
         public string Order_status { get; set; }
-        [ForeignKey("Customer")]
-        public int Customer_ID { get; set; }
+        [ForeignKey("user")]
+        public int User_ID { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        public virtual User user { get; set; }
         
         public decimal TotalCost { get; set; }
 
@@ -48,7 +48,7 @@ namespace Deco_Sara.Models
 
         public DateTime Order_deadlinedate { get; set; }
 
-
+        public int User_ID { get; set; }
         public decimal Order_allowance { get; set; }
 
         public bool Order_payment_status { get; set; }
@@ -61,9 +61,29 @@ namespace Deco_Sara.Models
     }
   public class Orderrequest
     {
-        public int Customer_ID { get; set; }
+        public int User_ID { get; set; }
         public List<OrderitemDTO> orderitems { get; set; } = new List<OrderitemDTO>();
-        public OrderDTO order { get; set; }
+        public CreateOrderDTO order { get; set; }
 
     }
+
+    public class CreateOrderDTO
+    {
+       
+        public string Order_description { get; set; }
+
+        public DateTime Order_deadlinedate { get; set; }
+
+        public int User_ID { get; set; }
+        public decimal Order_allowance { get; set; }
+
+        public bool Order_payment_status { get; set; }
+
+        public bool Order_allowance_status { get; set; }
+
+        public string Order_status { get; set; }
+
+        public decimal TotalCost { get; set; }
+    }
 }
+
