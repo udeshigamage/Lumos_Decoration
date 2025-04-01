@@ -27,8 +27,53 @@ namespace Deco_Sara.Controllers
 
         public async Task<IActionResult> GetEmployeeOrders(int id, int page = 1, int pageSize = 5)
         {
-            var orders = await _employeeService.GetordersbyEmplyeeid(id, page, pageSize);
-            return Ok(orders);
+            var (orders,totalcount) = await _employeeService.GetordersbyEmplyeeid(id, page, pageSize);
+            var response = new
+            {
+                data = orders.Select(v => new
+                {
+                    v.Order_ID,
+                    v.Order_deadlinedate,
+                    v.Order_allowance,
+                    v.Order_allowance_status,
+                    v.Order_date,
+                    v.Order_payment_status,
+                    v.Order_status,
+                    v.Order_description,
+                    v.TotalCost,
+
+                    Customer = new
+                    {
+                        v.Customer.Address,
+                        v.Customer.User_ID,
+                        v.Customer.Name,
+                        v.Customer.Email,
+                        v.Customer.Contact_no,
+                        v.Customer.NIC
+                    },
+
+                    Employee = v.Employee != null ? new
+                    {
+                        v.Employee.User_ID,
+                        v.Employee.Name,
+                        v.Employee.Email,
+                        v.Employee.Contact_no
+                    } : null, // If Employee is not assigned, return null
+
+                    OrderItems = v.Orderitems.Select(oi => new
+                    {
+                        oi.Order_ID,
+                        oi.Product_ID,
+                        oi.quantity,
+                        ProductName = oi.Product != null ? oi.Product.Product_name : "Unknown" // Handling null product case
+                    }),
+                }),
+
+                totalItems = totalcount,
+                totalPages = (int)Math.Ceiling((double)totalcount / pageSize),
+                currentPage = page
+            };
+            return Ok(response);
         }
         [HttpGet]
         public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10,string searchterm ="")
