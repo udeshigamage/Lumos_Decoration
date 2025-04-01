@@ -1,4 +1,5 @@
-﻿using Deco_Sara.Models;
+﻿using Deco_Sara.DTO;
+using Deco_Sara.Models;
 
 namespace Deco_Sara.Services
 {
@@ -28,7 +29,19 @@ namespace Deco_Sara.Services
 
         Task<bool> DeleteAsync(int id);
 
-       
+        Task<Message<string>> Updatestatusofallowance(int id);
+
+        Task<Message<string>> Updatestatusofpayment(int id);
+
+        Task<Message<string>> Updatestatusoforder(int id, string status);
+
+
+        Task<List<OrderDTO>> GetOrderfinancialdetailsasyncbyid(int id);
+
+
+
+
+
 
 
     }

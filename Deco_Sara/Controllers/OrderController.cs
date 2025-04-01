@@ -70,7 +70,31 @@ namespace Deco_Sara.Controllers
                 if (order == null) return NotFound();
                 return Ok(order);
             }
+        [HttpPost("updatestatusofallowance/{id}")]
+        public async Task<IActionResult> Updatestatusofallowance(int id)
+        {
+            var message = await _orderService.Updatestatusofallowance(id);
+            return Ok(message);
+        }
+        [HttpPost("updatestatusofpayment/{id}")]
+        public async Task<IActionResult> Updatestatusofpayment(int id)
+        {
+            var message = await _orderService.Updatestatusofpayment(id);
+            return Ok(message);
+        }
+        [HttpPost("updatestatusoforder/{id}")]
+        public async Task<IActionResult> Updatestatusoforder(int id, string status)
+        {
+            var message = await _orderService.Updatestatusoforder(id, status);
+            return Ok(message);
+        }
+        [HttpGet("orderfinancialdetails/{id}")]
 
+        public async Task<IActionResult> GetOrderfinancialdetails(int id)
+        {
+            var order = await _orderService.GetOrderfinancialdetailsasyncbyid(id);
+            return Ok(order);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Orderrequest request)

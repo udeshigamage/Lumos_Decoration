@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Deco_Sara.dbcontext__;
+using Deco_Sara.DTO;
 
 
 namespace Deco_Sara.Services
@@ -28,10 +29,123 @@ namespace Deco_Sara.Services
             return (Order, totalCount);
         }
 
+        public async Task<Message<string>> Updatestatusofallowance(int id)
+        {
+            try
+            {
+                var order = await _context.Order.FindAsync(id);
+                if (order == null)
+                {
+                    return new Message<string> { Text = "Order not found", Status = "F" };
+                }
+
+                order.Order_allowance_status = true;
+                await _context.SaveChangesAsync();
+
+                return new Message<string> { Text = "Order allowance status updated", Status = "S" };
+
+            }
+            catch (Exception)
+            {
+                return new Message<string> { Text = "Error", Status = "S" };
+            }
+        }
+
+        public async Task<Message<string>> Updatestatusofpayment(int id)
+        {
+            try
+            {
+                var order = await _context.Order.FindAsync(id);
+                if (order == null)
+                {
+                    return new Message<string> { Text = "Order not found", Status = "F" };
+                }
+
+                order.Order_payment_status = true;
+                await _context.SaveChangesAsync();
+
+                return new Message<string> { Text = "Order payment status updated", Status = "S" };
+
+            }
+            catch (Exception)
+            {
+                return new Message<string> { Text = "Error", Status = "S" };
+            }
         
+        }
+
+        public async Task<Message<string>> Updatestatusoforder(int id, string status) { 
+        
+            try
+            {
+                var order = await _context.Order.FindAsync(id);
+                if (order == null)
+                {
+                    return new Message<string> { Text = "Order not found", Status = "F" };
+                }
+
+                order.Order_status = status;
+                await _context.SaveChangesAsync();
+
+                return new Message<string> { Text = "Order status updated", Status = "S" };
+
+            }
+            catch (Exception)
+            {
+                return new Message<string> { Text = "Error", Status = "S" };
+            }
+        }
+
+        public async Task<List<OrderDTO>> GetOrderfinancialdetailsasyncbyid(int id)
+        {
+            try
+            {
+                var order = await _context.Order.FindAsync(id);
+                if (order == null)
+                {
+                    return null;
+                }
+
+                var orderitems = await _context.OrderItems.Where(orderitem => orderitem.Order_ID == id).ToListAsync();
+                var orderDTO = new List<OrderDTO>();
+
+                foreach (var item in orderitems)
+                {
+                    var product = await _context.Products.FindAsync(item.Product_ID);
+                    if (product == null)
+                    {
+                        throw new Exception($"Product {item.Product_ID} not found.");
+                    }
+
+                    orderDTO.Add(new OrderDTO
+                    {
+                        Order_ID = order.Order_ID,
+                        Order_description = order.Order_description,
+                        Order_deadlinedate = order.Order_deadlinedate,
+                        User_ID = order.User_ID,
+                        Order_allowance = order.Order_allowance,
+                        Order_payment_status = order.Order_payment_status,
+                        Order_allowance_status = order.Order_allowance_status,
+                        Order_status = order.Order_status,
+                        TotalCost = order.TotalCost
+                    });
+                }
+
+                return orderDTO;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
 
 
-        
+
+
+
+
 
 
         public async Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId)

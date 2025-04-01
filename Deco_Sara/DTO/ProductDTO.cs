@@ -1,4 +1,6 @@
 ﻿
+using Deco_Sara.Models;
+
 namespace Deco_Sara.DTO
 {
     public class    CreateProductDTO
