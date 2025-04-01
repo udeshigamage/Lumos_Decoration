@@ -16,7 +16,12 @@ namespace Deco_Sara.Services
 
         Task<Message<string>> ActiveAsync(int id);
 
-        
+        Task<List<ListuserDTO>> GetAllEmployeelistAsync();
+
+        Task<(List<Order>, int totalcount)> GetordersbyEmplyeeid(int emploeeid, int page = 1, int pagesize = 5);
+
+
+
 
     }
 }

@@ -41,7 +41,22 @@ namespace Deco_Sara.dbcontext__
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany()
+                .HasForeignKey(o => o.Customer_ID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Employee)
+                .WithMany()
+                .HasForeignKey(o => o.Employee_ID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
         }
+        
 
 
 

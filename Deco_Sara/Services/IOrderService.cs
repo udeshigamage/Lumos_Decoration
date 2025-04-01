@@ -38,6 +38,8 @@ namespace Deco_Sara.Services
 
         Task<List<OrderDTO>> GetOrderfinancialdetailsasyncbyid(int id);
 
+        Task<Message<string>> AssignEmployee(int employeeId,int orderId);
+
 
 
 

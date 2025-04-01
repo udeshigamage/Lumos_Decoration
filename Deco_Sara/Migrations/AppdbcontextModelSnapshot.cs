@@ -235,7 +235,13 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("Customer_ID")
+                    b.Property<int>("Customer_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Customer_ID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Employee_ID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Order_allowance")
@@ -264,14 +270,13 @@ namespace Deco_Sara.Migrations
                     b.Property<decimal>("TotalCost")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("User_ID")
-                        .HasColumnType("int");
-
                     b.HasKey("Order_ID");
 
                     b.HasIndex("Customer_ID");
 
-                    b.HasIndex("User_ID");
+                    b.HasIndex("Customer_ID1");
+
+                    b.HasIndex("Employee_ID");
 
                     b.ToTable("Order");
                 });
@@ -480,17 +485,24 @@ namespace Deco_Sara.Migrations
 
             modelBuilder.Entity("Deco_Sara.Models.Order", b =>
                 {
-                    b.HasOne("Deco_Sara.Models.Customer", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("Customer_ID");
-
-                    b.HasOne("Deco_Sara.Models.User", "user")
+                    b.HasOne("Deco_Sara.Models.User", "Customer")
                         .WithMany()
-                        .HasForeignKey("User_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Customer_ID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.HasOne("Deco_Sara.Models.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("Customer_ID1");
+
+                    b.HasOne("Deco_Sara.Models.User", "Employee")
+                        .WithMany()
+                        .HasForeignKey("Employee_ID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Orderitem", b =>

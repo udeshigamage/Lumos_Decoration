@@ -62,8 +62,58 @@ namespace Deco_Sara.Services
             }
         }
 
+        public async Task<(List<Order>, int totalcount)> GetordersbyEmplyeeid(int emploeeid, int page = 1, int pagesize = 5)
+        {
+            try
+            {
+                var query = _context.Order.Include(c => c.Employee).Where(c => c.Employee_ID == emploeeid).AsQueryable();
+                var orders = await query.Skip((page - 1) * pagesize).Take(pagesize).Select(c => new Order
+                {
+                    Order_ID = c.Order_ID,
+                    Order_deadlinedate = c.Order_deadlinedate,
+                    Order_allowance = c.Order_allowance,
+                    Order_allowance_status = c.Order_allowance_status,
+                    Order_date = c.Order_date,
+                    Order_payment_status = c.Order_payment_status,
+                    Order_status = c.Order_status,
+                    Order_description = c.Order_description,
+                    TotalCost = c.TotalCost,
+                    Customer_ID = c.Customer_ID,
+                    Employee_ID = c.Employee_ID,
+                    Orderitems = c.Orderitems,
+                    Customer = c.Customer,
+                    Employee = c.Employee
+                }).ToListAsync();
+                var totalcount = await query.CountAsync();
+
+                return (orders, totalcount);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
+
+        public async Task<List<ListuserDTO>> GetAllEmployeelistAsync()
+        {
+            try
+            {
+                var employeelist = await _context.Users.Where(c => c.RoleName == "Employee").Select(c => new ListuserDTO
+                {
+                    Name = c.Name,
+                    User_ID = c.User_ID,
+
+                }).ToListAsync();
+
+                return employeelist;
 
 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
 
         public async Task<Message<string>> UpdateAsync(int id, UpdateUserDTO updatedEmployee)
         {

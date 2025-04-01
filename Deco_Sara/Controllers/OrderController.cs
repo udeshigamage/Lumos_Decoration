@@ -36,21 +36,31 @@ namespace Deco_Sara.Controllers
                     v.Order_status,
                     v.Order_description,
                     v.TotalCost,
-                    
+
                     Customer = new
                     {
-                       v.user.Address,
-                       v.user.Name,
-                       v.user.Email,
-                       v.user.LastUpdatedTime,
-                       v.User_ID
-                        , // Add any other customer properties you need
+                        v.Customer.Address,
+                        v.Customer.User_ID,
+                        v.Customer.Name,
+                        v.Customer.Email,
+                        v.Customer.Contact_no,
+                        v.Customer.NIC
                     },
+
+                    Employee = v.Employee != null ? new
+                    {
+                        v.Employee.User_ID,
+                        v.Employee.Name,
+                        v.Employee.Email,
+                        v.Employee.Contact_no
+                    } : null, // If Employee is not assigned, return null
+
                     OrderItems = v.Orderitems.Select(oi => new
                     {
                         oi.Order_ID,
                         oi.Product_ID,
-                        oi.quantity
+                        oi.quantity,
+                        ProductName = oi.Product != null ? oi.Product.Product_name : "Unknown" // Handling null product case
                     }),
                 }),
 
@@ -59,7 +69,16 @@ namespace Deco_Sara.Controllers
                 currentPage = page
             };
 
+
             return Ok(response);
+        }
+
+        [HttpPost("{employee_id}/assignemployee/{order_id}")]
+
+        public async Task<IActionResult> AssignEmployee(int employee_id, int order_id)
+        {
+            var message = await _orderService.AssignEmployee(employee_id, order_id);
+            return Ok(message);
         }
 
 

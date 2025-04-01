@@ -16,25 +16,6 @@ namespace Deco_Sara.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Category_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Category_name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Category_description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Category_image = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Category_Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Customer",
                 columns: table => new
                 {
@@ -150,6 +131,27 @@ namespace Deco_Sara.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Tb_category",
+                columns: table => new
+                {
+                    Category_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Category_name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Category_description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Category_image = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Created_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modified_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tb_category", x => x.Category_Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Tb_Users",
                 columns: table => new
                 {
@@ -165,13 +167,55 @@ namespace Deco_Sara.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PasswordHash = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    usertype = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    RoleName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    userimage = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NIC = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Servicerole = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastUpdatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    isactive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tb_Users", x => x.User_ID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Employee",
+                columns: table => new
+                {
+                    Emp_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    emp_Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    emp_address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    emp_contact_no = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    emp_image = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nic = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    emp_allowance = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Role_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employee", x => x.Emp_ID);
+                    table.ForeignKey(
+                        name: "FK_Employee_Role_Role_ID",
+                        column: x => x.Role_ID,
+                        principalTable: "Role",
+                        principalColumn: "Role_ID",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -193,9 +237,9 @@ namespace Deco_Sara.Migrations
                 {
                     table.PrimaryKey("PK_Subcategories", x => x.Subcategory_Id);
                     table.ForeignKey(
-                        name: "FK_Subcategories_Categories_Category_Id",
+                        name: "FK_Subcategories_Tb_category_Category_Id",
                         column: x => x.Category_Id,
-                        principalTable: "Categories",
+                        principalTable: "Tb_category",
                         principalColumn: "Category_Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -216,84 +260,31 @@ namespace Deco_Sara.Migrations
                     Order_allowance_status = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Order_status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    TotalCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Customer_ID = table.Column<int>(type: "int", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                    Employee_ID = table.Column<int>(type: "int", nullable: true),
+                    Customer_ID1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Order_ID);
                     table.ForeignKey(
-                        name: "FK_Order_Customer_Customer_ID",
-                        column: x => x.Customer_ID,
+                        name: "FK_Order_Customer_Customer_ID1",
+                        column: x => x.Customer_ID1,
                         principalTable: "Customer",
-                        principalColumn: "Customer_ID",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Employee",
-                columns: table => new
-                {
-                    Emp_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    emp_Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    emp_address = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    emp_contact_no = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    emp_image = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    nic = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    emp_allowance = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Role_ID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employee", x => x.Emp_ID);
+                        principalColumn: "Customer_ID");
                     table.ForeignKey(
-                        name: "FK_Employee_Role_Role_ID",
-                        column: x => x.Role_ID,
-                        principalTable: "Role",
-                        principalColumn: "Role_ID",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Product_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Product_name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Product_price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Product_image = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Product_discount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Subcategory_Id = table.Column<int>(type: "int", nullable: false),
-                    Category_Id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Product_Id);
+                        name: "FK_Order_Tb_Users_Customer_ID",
+                        column: x => x.Customer_ID,
+                        principalTable: "Tb_Users",
+                        principalColumn: "User_ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_Category_Id",
-                        column: x => x.Category_Id,
-                        principalTable: "Categories",
-                        principalColumn: "Category_Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Subcategories_Subcategory_Id",
-                        column: x => x.Subcategory_Id,
-                        principalTable: "Subcategories",
-                        principalColumn: "Subcategory_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Order_Tb_Users_Employee_ID",
+                        column: x => x.Employee_ID,
+                        principalTable: "Tb_Users",
+                        principalColumn: "User_ID",
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -317,6 +308,39 @@ namespace Deco_Sara.Migrations
                         column: x => x.EmployeeEmp_ID,
                         principalTable: "Employee",
                         principalColumn: "Emp_ID",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Product_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Product_name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Product_price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Product_image = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Product_discount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Subcategory_Id = table.Column<int>(type: "int", nullable: false),
+                    Category_Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Product_Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Subcategories_Subcategory_Id",
+                        column: x => x.Subcategory_Id,
+                        principalTable: "Subcategories",
+                        principalColumn: "Subcategory_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Tb_category_Category_Id",
+                        column: x => x.Category_Id,
+                        principalTable: "Tb_category",
+                        principalColumn: "Category_Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -362,6 +386,16 @@ namespace Deco_Sara.Migrations
                 name: "IX_Order_Customer_ID",
                 table: "Order",
                 column: "Customer_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_Customer_ID1",
+                table: "Order",
+                column: "Customer_ID1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_Employee_ID",
+                table: "Order",
+                column: "Employee_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_Order_ID",
@@ -411,9 +445,6 @@ namespace Deco_Sara.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Tb_Users");
-
-            migrationBuilder.DropTable(
                 name: "Employee");
 
             migrationBuilder.DropTable(
@@ -429,10 +460,13 @@ namespace Deco_Sara.Migrations
                 name: "Customer");
 
             migrationBuilder.DropTable(
+                name: "Tb_Users");
+
+            migrationBuilder.DropTable(
                 name: "Subcategories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Tb_category");
         }
     }
 }

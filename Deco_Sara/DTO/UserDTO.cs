@@ -73,4 +73,11 @@ namespace Deco_Sara.DTO
         public string PasswordHash { get; set; }
 
     }
+
+    public class ListuserDTO
+    {
+       public  int User_ID { get; set; }
+       public string Name { get; set; }
+
+    }
 }

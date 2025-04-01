@@ -17,9 +17,37 @@ namespace Deco_Sara.Services
             _context = context;
         }
 
+        public async Task<Message<string>> AssignEmployee( int employeeId,int orderId)
+        {
+            try
+            {
+                var order = await _context.Order.FindAsync(orderId);
+                if (order == null)
+                {
+                    return new Message<string> { Text = "Order not found", Status = "F" };
+                }
+
+                var employee = await _context.Users.FindAsync(employeeId);
+                if (employee == null)
+                {
+                    return new Message<string> { Text = "Employee not found", Status = "F" };
+                }
+
+                order.Employee_ID = employeeId;
+                await _context.SaveChangesAsync();
+
+                return new Message<string> { Text = "Employee assigned to order", Status = "S" };
+
+            }
+            catch (Exception ex)
+            {
+                return new Message<string> { Text = "Error", Status = "F" };
+            }
+        }
+
         public async Task<(IEnumerable<Order> Order, int TotalCount)> GetAllOrdersAsync(int page = 1, int pageSize = 10)
         {
-            var query =  _context.Order.Include(order => order.Orderitems).ThenInclude(Orderitem => Orderitem.Product).Include(order => order.user);
+            var query =  _context.Order.Include(order => order.Orderitems).ThenInclude(Orderitem => Orderitem.Product).Include(order => order.Customer).Include(order =>order.Employee);
             var totalCount = await query.CountAsync();
 
             var Order = await query
@@ -122,7 +150,7 @@ namespace Deco_Sara.Services
                         Order_ID = order.Order_ID,
                         Order_description = order.Order_description,
                         Order_deadlinedate = order.Order_deadlinedate,
-                        User_ID = order.User_ID,
+                        Customer_ID = order.Customer_ID,
                         Order_allowance = order.Order_allowance,
                         Order_payment_status = order.Order_payment_status,
                         Order_allowance_status = order.Order_allowance_status,
@@ -151,20 +179,20 @@ namespace Deco_Sara.Services
         public async Task<List<Order>> GetAllOrdersForCustomerAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.User_ID == customerId)
+                .Where(order => order.Customer_ID == customerId)
                 .ToListAsync();
         }
 
         public async Task<int> GetPendingOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.User_ID == customerId && order.Order_status == "pending")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "pending")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.User_ID == customerId && order.Order_status == "To Accept")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "To Accept")
                 .CountAsync();
         }
         public async Task<int> GetNewOrdersCountAsync()
@@ -188,7 +216,7 @@ namespace Deco_Sara.Services
         public async Task<int> GetCompletedOrdersCountAsync(int customerId)
         {
             return await _context.Order
-                .Where(order => order.User_ID == customerId && order.Order_status == "Completed")
+                .Where(order => order.Customer_ID == customerId && order.Order_status == "Completed")
                 .CountAsync();
         }
 
@@ -204,7 +232,7 @@ namespace Deco_Sara.Services
                
                 var orders = new Order
                 {
-                    User_ID = order.User_ID,
+                    Customer_ID = order.Customer_ID,
                     Order_date = DateTime.Now,
                     Order_allowance = order.Order_allowance,
                     Order_status = order.Order_status,

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    [Migration("20250327111057_in")]
-    partial class @in
+    [Migration("20250401194116_modi")]
+    partial class modi
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,9 +67,15 @@ namespace Deco_Sara.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("Created_time")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Modified_time")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Category_Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Tb_category");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Customer", b =>
@@ -134,12 +140,16 @@ namespace Deco_Sara.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Role_ID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("email")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Nic")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Role_ID")
+                        .HasColumnType("int");
 
                     b.Property<string>("emp_Name")
                         .IsRequired()
@@ -157,10 +167,6 @@ namespace Deco_Sara.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("emp_image")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("nic")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Emp_ID");
@@ -235,6 +241,12 @@ namespace Deco_Sara.Migrations
                     b.Property<int>("Customer_ID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Customer_ID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Employee_ID")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Order_allowance")
                         .HasColumnType("decimal(65,30)");
 
@@ -264,6 +276,10 @@ namespace Deco_Sara.Migrations
                     b.HasKey("Order_ID");
 
                     b.HasIndex("Customer_ID");
+
+                    b.HasIndex("Customer_ID1");
+
+                    b.HasIndex("Employee_ID");
 
                     b.ToTable("Order");
                 });
@@ -416,6 +432,9 @@ namespace Deco_Sara.Migrations
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("NIC")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -424,8 +443,21 @@ namespace Deco_Sara.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("role")
+                    b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Servicerole")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("isactive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("userimage")
+                        .HasColumnType("longtext");
 
                     b.HasKey("User_ID");
 
@@ -456,13 +488,24 @@ namespace Deco_Sara.Migrations
 
             modelBuilder.Entity("Deco_Sara.Models.Order", b =>
                 {
-                    b.HasOne("Deco_Sara.Models.Customer", "Customer")
-                        .WithMany("Orders")
+                    b.HasOne("Deco_Sara.Models.User", "Customer")
+                        .WithMany()
                         .HasForeignKey("Customer_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Deco_Sara.Models.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("Customer_ID1");
+
+                    b.HasOne("Deco_Sara.Models.User", "Employee")
+                        .WithMany()
+                        .HasForeignKey("Employee_ID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Deco_Sara.Models.Orderitem", b =>

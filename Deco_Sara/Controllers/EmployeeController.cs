@@ -15,7 +15,21 @@ namespace Deco_Sara.Controllers
         {
             _employeeService = employeeService;
         }
+        [HttpGet("EmployeeList")]
 
+        public async Task<IActionResult> GetAllEmployeelists()
+        {
+
+           var employees = await _employeeService.GetAllEmployeelistAsync();
+            return Ok(employees);
+        }
+        [HttpGet("EmployeeOrders/{id}")]
+
+        public async Task<IActionResult> GetEmployeeOrders(int id, int page = 1, int pageSize = 5)
+        {
+            var orders = await _employeeService.GetordersbyEmplyeeid(id, page, pageSize);
+            return Ok(orders);
+        }
         [HttpGet]
         public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10,string searchterm ="")
         {
