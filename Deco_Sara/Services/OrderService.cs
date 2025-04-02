@@ -229,23 +229,27 @@ namespace Deco_Sara.Services
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-               
+                // Creating the order object
                 var orders = new Order
                 {
                     Customer_ID = order.Customer_ID,
                     Order_date = DateTime.Now,
+                    Order_description = order.Order_description,
+                    Order_deadlinedate = order.Order_deadlinedate,
                     Order_allowance = order.Order_allowance,
                     Order_status = order.Order_status,
-                    Order_description = order.Order_description,
                     Order_allowance_status = order.Order_allowance_status,
                     Order_payment_status = order.Order_payment_status,
                     TotalCost = order.TotalCost
                 };
 
                 
+
+                // Adding the order to the context
                 _context.Order.Add(orders);
-                await _context.SaveChangesAsync(); 
-               
+                await _context.SaveChangesAsync();
+
+                // Handling Orderitems
                 foreach (var item in orderitems)
                 {
                     var product = await _context.Products.FindAsync(item.Product_ID);
@@ -254,10 +258,9 @@ namespace Deco_Sara.Services
                         throw new Exception($"Product {item.Product_ID} not found.");
                     }
 
-                   
                     var orderItem = new Orderitem
                     {
-                        Order_ID = orders.Order_ID, 
+                        Order_ID = orders.Order_ID,
                         Product_ID = item.Product_ID,
                         quantity = item.quantity
                     };
@@ -265,10 +268,10 @@ namespace Deco_Sara.Services
                     _context.OrderItems.Add(orderItem);
                 }
 
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return orders.Order_ID; 
+                return orders.Order_ID;
             }
             catch (Exception)
             {
@@ -276,6 +279,7 @@ namespace Deco_Sara.Services
                 throw;
             }
         }
+
 
 
         public async Task<Order?> UpdateAsync(int id, Order updatedOrder)
