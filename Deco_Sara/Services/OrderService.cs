@@ -183,42 +183,50 @@ namespace Deco_Sara.Services
                 .ToListAsync();
         }
 
-        public async Task<int> GetPendingOrdersCountAsync(int customerId)
-        {
-            return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "pending")
-                .CountAsync();
-        }
-        public async Task<int> GetNewOrdersCountAsync(int customerId)
-        {
-            return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "To Accept")
-                .CountAsync();
-        }
-        public async Task<int> GetNewOrdersCountAsync()
-        {
-            return await _context.Order
-                .Where(order =>  order.Order_status == "To Accept")
-                .CountAsync();
-        }
-        public async Task<int> GetCompletedOrdersCountAsync()
-        {
-            return await _context.Order
-                .Where(order => order.Order_status == "Completed")
-                .CountAsync();
-        }
         public async Task<int> GetPendingOrdersCountAsync()
         {
             return await _context.Order
                 .Where(order => order.Order_status == "pending")
                 .CountAsync();
         }
-        public async Task<int> GetCompletedOrdersCountAsync(int customerId)
+        public async Task<int> GetAcceptedOrdersCountAsync()
         {
             return await _context.Order
-                .Where(order => order.Customer_ID == customerId && order.Order_status == "Completed")
+                .Where(order =>  order.Order_status == "accepted")
                 .CountAsync();
         }
+        public async Task<int> GetProcessingOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order =>  order.Order_status == "processing")
+                .CountAsync();
+        }
+        public async Task<int> GetCompletedOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order => order.Order_status == "completed")
+                .CountAsync();
+        }
+        public async Task<int> GettodeliveredOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order => order.Order_status == "todelivered")
+                .CountAsync();
+        }
+        public async Task<int> GetconfirmedOrdersCountAsync()
+        {
+            return await _context.Order
+                .Where(order => order.Order_status == "confirmed")
+                .CountAsync();
+        }
+
+        public async Task<int> GettotalOrdersCountAsync()
+        {
+            return await _context.Order
+                
+                .CountAsync();
+        }
+
 
         public async Task<Order> GetByIdAsync(int id)
         {

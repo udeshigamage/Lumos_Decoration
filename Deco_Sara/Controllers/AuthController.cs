@@ -46,6 +46,8 @@ namespace Deco_Sara.Controllers
                 Address = c.Address,
                 Role = c.Role,
                 User_ID =c.User_ID,
+                userimage=c.userimage,
+                Servicerole=c.Servicerole,
 
             }).ToListAsync();
 

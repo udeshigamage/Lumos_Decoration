@@ -20,6 +20,9 @@ namespace Deco_Sara.Services
 
         Task<(List<Order>, int totalcount)> GetordersbyEmplyeeid(int emploeeid, int page = 1, int pagesize = 5);
 
+        Task<int> GetCountconfirmedordersbyEmplyeeid(int emploeeid);
+
+        Task<int> GetCountprocessingdordersbyEmplyeeid(int emploeeid);
 
 
 

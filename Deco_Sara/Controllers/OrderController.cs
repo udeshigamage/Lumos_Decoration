@@ -148,39 +148,32 @@ namespace Deco_Sara.Controllers
             return Ok(orders);
         }
 
-        [HttpGet("orderscount/{customerId}")]
-        public async Task<IActionResult> GetOrdersCount(int customerId)
-        {
-            var pendingCount = await _orderService.GetPendingOrdersCountAsync(customerId);
-            var newCount = await _orderService.GetNewOrdersCountAsync(customerId);
-            var completedCount = await _orderService.GetCompletedOrdersCountAsync(customerId);
-
-            var result = new
-            {
-                Pending = pendingCount,
-                New = newCount,
-                Completed = completedCount
-            };
-
-            return Ok(result);
-        }
-
-        [HttpGet("orderscount")]
-        public async Task<IActionResult> GetAllOrdersCount()
+        [HttpGet("orderscount/getcount")]
+        public async Task<IActionResult> GetOrdersCount()
         {
             var pendingCount = await _orderService.GetPendingOrdersCountAsync();
-            var newCount = await _orderService.GetNewOrdersCountAsync();
+            var processingCount = await _orderService.GetProcessingOrdersCountAsync();
             var completedCount = await _orderService.GetCompletedOrdersCountAsync();
-
+            var totalCount = await _orderService.GettotalOrdersCountAsync();
+            var todelivered = await _orderService.GettodeliveredOrdersCountAsync();
+            var accepted = await _orderService.GetAcceptedOrdersCountAsync();
+            var confirmed = await _orderService.GetconfirmedOrdersCountAsync();
             var result = new
             {
                 Pending = pendingCount,
-                New = newCount,
-                Completed = completedCount
+               Processing= processingCount,
+               Completed = completedCount,
+               Total = totalCount,
+               ToDelivered = todelivered,
+               Accepted = accepted,
+               Confirmed = confirmed,
+                
             };
 
             return Ok(result);
         }
+
+       
 
 
 

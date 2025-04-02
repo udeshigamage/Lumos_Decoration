@@ -75,6 +75,24 @@ namespace Deco_Sara.Controllers
             };
             return Ok(response);
         }
+
+
+        [HttpGet("EmployeeOrders/count/{id}")]
+
+        public async Task<IActionResult> GetEmployeeOrdersCount(int id)
+        {
+            var count = await _employeeService.GetCountconfirmedordersbyEmplyeeid(id);
+            return Ok(count);
+        }
+
+        [HttpGet("EmployeeOrders/count/processing/{id}")]
+
+        public async Task<IActionResult> GetEmployeeprocessingOrdersCount(int id)
+        {
+            var count = await _employeeService.GetCountprocessingdordersbyEmplyeeid(id);
+            return Ok(count);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetEmployees(int page = 1, int pageSize = 10,string searchterm ="")
         {

@@ -66,7 +66,8 @@ namespace Deco_Sara.Services
         {
             try
             {
-                var query = _context.Order.Include(c => c.Employee).Where(c => c.Employee_ID == emploeeid).AsQueryable();
+                var query = _context.Order.
+                    Include(c => c.Employee).Where(c => c.Employee_ID == emploeeid && c.Order_status !="denied" && c.Order_status!="pending" && c.Order_allowance_status ==true).AsQueryable();
                 var orders = await query.Skip((page - 1) * pagesize).Take(pagesize).Select(c => new Order
                 {
                     Order_ID = c.Order_ID,
@@ -93,6 +94,43 @@ namespace Deco_Sara.Services
                 throw new Exception("error fetching category");
             }
         }
+
+        public async Task<int> GetCountconfirmedordersbyEmplyeeid(int emploeeid)
+        {
+            try
+            {
+                var count = await _context.Order.
+                    Include(c => c.Employee).Where(c => c.Employee_ID == emploeeid && c.Order_status == "confirmed" ).CountAsync();
+               
+               
+
+                return (count);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
+
+
+        public async Task<int> GetCountprocessingdordersbyEmplyeeid(int emploeeid)
+        {
+            try
+            {
+                var count = await _context.Order.
+                    Include(c => c.Employee).Where(c => c.Employee_ID == emploeeid && c.Order_status == "processing").CountAsync();
+
+
+
+                return (count);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("error fetching category");
+            }
+        }
+
+
 
         public async Task<List<ListuserDTO>> GetAllEmployeelistAsync()
         {
