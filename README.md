@@ -1,50 +1,44 @@
-# Lumos Decoration - Frontend
+# Lumos Decoration - Backend
 
 ## Overview
 
-Lumos Decoration is an e-commerce platform where customers can order garlands, bouquets, and decorations. Employees manage orders and track earnings, while admins oversee the entire system.
+Lumos Decoration is an e-commerce platform where customers can place orders for decorations, employees manage orders, and admins oversee operations.
 
-This repository contains the **React (TypeScript) frontend**, built with **Tailwind CSS**, **Redux**, and **React hooks**.
+This repository contains the **backend API**, built using **C# .NET (ASP.NET Core)** with **JWT authentication, role-based access, and file handling**.
 
 ---
 
 ## Tech Stack
 
-- **React (TypeScript)** - UI Development
-- **Tailwind CSS** - Styling
-- **React Router** - Navigation
-- **Redux** - Global state management
-- **React Hooks** - (`useState`, `useEffect`, `useContext`)
-- **Axios** - API requests
-- **LocalStorage** - Cart item storage
-- **JWT Authentication** - Secure login & access
+- **ASP.NET Core** - Backend API
+- **Entity Framework Core** - ORM for database management
+- **SQL Server / MySQL** - Database
+- **JWT Authentication** - Secure login & role-based access
+- **Swagger** - API documentation
 
 ---
 
 ## Features
 
 ### **Customer**
-- Browse & search for decorations (garlands, bouquets, etc.)
-- Add/remove items from the cart (stored in `localStorage`)
-- Place orders & track order history
-- Secure login with **JWT Authentication**
+- Register & login with **JWT authentication**
+- Browse products & place orders
+- View order history
 
 ### **Employee**
-- View assigned orders & update statuses
+- View & manage assigned orders
+- Update order status
 - Track earnings & allowances
 
 ### **Admin**
 - Manage users, employees & products
-- Monitor orders and overall system operations
+- Oversee orders & reports
 
 ### **Authentication & Authorization**
-- JWT authentication for secure access
-- Role-based access control (Admin, Employee, Customer)
+- Secure **JWT-based authentication**
+- **Role-based access control (RBAC)** for Admin, Employee, and Customer
 
-### **State Management**
-- Redux is used for **global state management**.
-- LocalStorage is used for **persisting cart items**.
-
----
-
+### **File Upload Handling**
+- Customers & employees can upload images
+- Uploaded files are stored in **`wwwroot/uploads/`**
 
