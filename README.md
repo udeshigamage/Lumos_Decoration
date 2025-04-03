@@ -12,7 +12,7 @@ This repository contains the **backend API**, built using **C# .NET (ASP.NET Cor
 
 - **ASP.NET Core** - Backend API
 - **Entity Framework Core** - ORM for database management
-- **SQL Server / MySQL** - Database
+- ** MySQL** - Database
 - **JWT Authentication** - Secure login & role-based access
 - **Swagger** - API documentation
 
