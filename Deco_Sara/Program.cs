@@ -29,6 +29,7 @@ builder.Services.AddDbContext<Appdbcontext>(options =>
 
 // Register application services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<AwsS3Service>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
@@ -37,6 +38,8 @@ builder.Services.AddScoped<ICategoryservice, Categoriesservice>();
 builder.Services.AddScoped<IProductservice, Productservice>();
 builder.Services.AddScoped<IRoleservices, Roleservices>();
 builder.Services.AddScoped<Iuserservice, Userservicecs>();
+
+
 builder.Services.AddScoped<AuthService>();
 
 // Configure CORS
@@ -87,7 +90,9 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
+        Type = SecuritySchemeType.ApiKey,
+
+
         Scheme = JwtBearerDefaults.AuthenticationScheme,
         Description = "Enter JWT Bearer token",
         Reference = new OpenApiReference

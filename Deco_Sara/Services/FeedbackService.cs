@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Deco_Sara.dbcontext__;
+using Deco_Sara.DTO;
 
 namespace Deco_Sara.Services 
 {
@@ -26,11 +27,44 @@ namespace Deco_Sara.Services
             return await _context.Feedbacks.FindAsync(id);
         }
 
-        public async Task<Feedback> AddAsync(Feedback feedback)
+        public async Task<Message<string>> AddAsync(CreateFeedbackDTO feedback)
         {
-            _context.Feedbacks.Add(feedback);
-            await _context.SaveChangesAsync();
-            return feedback;
+            try
+            {
+                var Feedback = new Feedback
+                {
+                    Rating = feedback.Rating,
+                    FeedbackDescription = feedback.FeedbackDescription,
+                    FeedbackDate = DateTime.Now,
+                    IsResolved = false,
+                    Customer_ID = feedback.Customer_ID,
+                    filepath = feedback.fileurl,
+
+
+                };
+                await _context.Feedbacks.AddAsync(Feedback);
+                await _context.SaveChangesAsync();
+                return new Message<string>
+                {
+                    Text = "Feedback added successfully",
+                    Status = "S",
+                    Code = "200",
+                    Result = null
+                };
+
+
+            }
+            catch(Exception ex)
+            {
+                return new Message<string>
+                {
+                   Text = ex.Message,
+                   Status = "E",
+                   Code = "500",
+                   Result = null
+                };
+            }
+           
         }
         public async Task<Feedback?> UpdateAsync(int id, Feedback updatedFeedback)
         {

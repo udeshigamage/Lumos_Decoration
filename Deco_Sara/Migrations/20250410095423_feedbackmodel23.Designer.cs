@@ -3,6 +3,7 @@ using System;
 using Deco_Sara.dbcontext__;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    partial class AppdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250410095423_feedbackmodel23")]
+    partial class feedbackmodel23
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,10 +197,6 @@ namespace Deco_Sara.Migrations
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<string>("filepath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("FeedbackId");
 

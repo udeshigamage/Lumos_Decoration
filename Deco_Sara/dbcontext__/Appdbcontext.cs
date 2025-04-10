@@ -54,6 +54,10 @@ namespace Deco_Sara.dbcontext__
                 .HasForeignKey(o => o.Employee_ID)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Feedback>()
+                .HasOne(o => o.user)
+                .WithMany(o => o.Feedbacks);
+
 
         }
         

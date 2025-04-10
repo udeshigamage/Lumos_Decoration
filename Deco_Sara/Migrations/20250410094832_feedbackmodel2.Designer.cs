@@ -3,6 +3,7 @@ using System;
 using Deco_Sara.dbcontext__;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Deco_Sara.Migrations
 {
     [DbContext(typeof(Appdbcontext))]
-    partial class AppdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250410094832_feedbackmodel2")]
+    partial class feedbackmodel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,13 +198,7 @@ namespace Deco_Sara.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<string>("filepath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasKey("FeedbackId");
-
-                    b.HasIndex("Customer_ID");
 
                     b.ToTable("Feedbacks");
                 });
@@ -495,17 +492,6 @@ namespace Deco_Sara.Migrations
                     b.Navigation("role");
                 });
 
-            modelBuilder.Entity("Deco_Sara.Models.Feedback", b =>
-                {
-                    b.HasOne("Deco_Sara.Models.User", "user")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("Customer_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("Deco_Sara.Models.Order", b =>
                 {
                     b.HasOne("Deco_Sara.Models.User", "Customer")
@@ -610,8 +596,6 @@ namespace Deco_Sara.Migrations
 
             modelBuilder.Entity("Deco_Sara.Models.User", b =>
                 {
-                    b.Navigation("Feedbacks");
-
                     b.Navigation("OrdersAsCustomer");
 
                     b.Navigation("OrdersAsEmployee");

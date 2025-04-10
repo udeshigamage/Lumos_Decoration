@@ -36,6 +36,8 @@ namespace Deco_Sara.Models
 
         public bool isactive { get; set; }
 
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
+
         public virtual ICollection<Order> OrdersAsCustomer { get; set; } // Orders placed by this customer
         public virtual ICollection<Order> OrdersAsEmployee { get; set; } // Orders assigned to this employee
     }
