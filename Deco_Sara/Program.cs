@@ -6,9 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using Deco_Sara.Signalr;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSignalR();
 // Add services to the container
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -49,7 +51,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173")  // React app URL
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+        .AllowCredentials(); 
     });
 });
 
@@ -107,8 +110,9 @@ builder.Services.AddSwaggerGen(options =>
         { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
-
+  
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -118,6 +122,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowReactApp");
+app.MapHub<ChatHub>("/chathub");
 
 app.UseAuthentication(); // Validate JWT token
 app.UseAuthorization();
