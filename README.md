@@ -12,6 +12,8 @@ This repository contains the **backend API**, built using **C# .NET (ASP.NET Cor
 
 - **ASP.NET Core** - Backend API
 - **Entity Framework Core** - ORM for database management
+- **AWS S3 bucket,rdbms,Hosted onEC2 instance
+- **used SIGNALR for realtime chat
 - ** MySQL** - Database
 - **JWT Authentication** - Secure login & role-based access
 - **Swagger** - API documentation
